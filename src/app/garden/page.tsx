@@ -16,6 +16,7 @@ import {
   TreePine,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import Link from 'next/link';
 
 interface GardenItem {
   date: string;
@@ -112,7 +113,11 @@ export default function GardenPage() {
                 Your journal is waiting to be filled.
               </p>
               <p className="text-sm">
-                Start by creating your first reflection.
+                Start by creating your first reflection in the{' '}
+                <Link href="/whispers" className="text-primary hover:underline">
+                  Whispers
+                </Link>{' '}
+                page.
               </p>
             </div>
           )}

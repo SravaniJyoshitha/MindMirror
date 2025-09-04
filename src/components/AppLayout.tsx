@@ -1,6 +1,6 @@
 'use client';
 
-import { Bot, Sprout, MessageSquare, Sparkles } from 'lucide-react';
+import { Sprout, MessageSquare, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
@@ -19,7 +19,6 @@ import {
 import { Toaster } from '@/components/ui/toaster';
 
 const navItems = [
-  { href: '/', label: 'Avatar', icon: Bot },
   { href: '/garden', label: 'Garden', icon: Sprout },
   { href: '/whispers', label: 'Whispers', icon: MessageSquare },
 ];
