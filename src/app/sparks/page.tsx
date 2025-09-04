@@ -16,17 +16,29 @@ import {
   type CognitiveSparkOutput,
 } from '@/ai/flows/get-cognitive-spark';
 import { useToast } from '@/hooks/use-toast';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 
 export default function SparksPage() {
   const [spark, setSpark] = useState<CognitiveSparkOutput | null>(null);
+  const [situation, setSituation] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
   const handleGetSpark = async () => {
+    if (!situation.trim()) {
+      toast({
+        variant: 'destructive',
+        title: 'Please describe your situation.',
+        description: 'We need to know what you\'re going through to help.',
+      });
+      return;
+    }
+
     setIsLoading(true);
     setSpark(null);
     try {
-      const newSpark = await getCognitiveSpark();
+      const newSpark = await getCognitiveSpark(situation);
       setSpark(newSpark);
     } catch (error) {
       console.error('Error getting cognitive spark:', error);
@@ -41,23 +53,49 @@ export default function SparksPage() {
     }
   };
 
+  const handleNewSpark = () => {
+    setSpark(null);
+    setSituation('');
+  };
+
   return (
     <div className="container mx-auto flex flex-col items-center justify-center space-y-8 text-center">
       <div>
         <h1 className="text-3xl font-headline mb-2">Cognitive Sparks</h1>
         <p className="text-muted-foreground max-w-2xl mx-auto">
-          Challenge your thought patterns and discover new perspectives with a
-          quick cognitive exercise. Press the button to generate your spark.
+          Describe a situation or a feeling, and get a tailored cognitive
+          exercise to help you find a new perspective.
         </p>
       </div>
 
       <div className="w-full max-w-md">
         {!spark && !isLoading && (
-          <Card className="flex flex-col items-center justify-center min-h-[20rem] p-8">
-            <Zap className="w-16 h-16 text-primary mb-4" />
-            <Button size="lg" onClick={handleGetSpark}>
-              Generate a New Spark
-            </Button>
+          <Card className="min-h-[20rem] p-8">
+            <CardHeader>
+              <CardTitle>What&apos;s on your mind?</CardTitle>
+              <CardDescription>
+                Briefly describe the situation you&apos;re facing.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid w-full gap-1.5">
+                <Label htmlFor="situation" className="sr-only">
+                  Your Situation
+                </Label>
+                <Textarea
+                  id="situation"
+                  placeholder="e.g., I'm feeling anxious about a big presentation..."
+                  value={situation}
+                  onChange={(e) => setSituation(e.target.value)}
+                  rows={4}
+                  className="resize-none"
+                />
+              </div>
+              <Button size="lg" onClick={handleGetSpark} className="w-full">
+                <Zap className="mr-2" />
+                Generate Spark
+              </Button>
+            </CardContent>
           </Card>
         )}
 
@@ -85,7 +123,7 @@ export default function SparksPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button className="w-full" onClick={handleGetSpark}>
+              <Button className="w-full" onClick={handleNewSpark}>
                 Generate Another Spark
               </Button>
             </CardFooter>
