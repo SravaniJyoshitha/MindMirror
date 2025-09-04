@@ -1,6 +1,6 @@
 'use client';
 
-import { Sprout, MessageSquare, Sparkles } from 'lucide-react';
+import { Sprout, MessageSquare, Zap, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
@@ -21,6 +21,7 @@ import { Toaster } from '@/components/ui/toaster';
 const navItems = [
   { href: '/garden', label: 'Garden', icon: Sprout },
   { href: '/whispers', label: 'Whispers', icon: MessageSquare },
+  { href: '/sparks', label: 'Sparks', icon: Zap },
 ];
 
 export function AppLayout({ children }: { children: ReactNode }) {
