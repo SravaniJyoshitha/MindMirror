@@ -23,7 +23,7 @@ export default function WhispersPage() {
     <div className="container mx-auto space-y-8">
       <div>
         <h1 className="text-3xl font-headline mb-2">
-          Safe Anonymous Whisper Space
+          Anonymous Thought Stream
         </h1>
         <p className="text-muted-foreground">
           A place to share your thoughts and feelings without judgment. You are
@@ -35,9 +35,9 @@ export default function WhispersPage() {
         <div className="lg:col-span-1">
           <Card className="sticky top-24 shadow-lg">
             <CardHeader>
-              <CardTitle>Share a Whisper</CardTitle>
+              <CardTitle>Share a Thought</CardTitle>
               <CardDescription>
-                Your thoughts are safe here. They will be shared anonymously.
+                Your thoughts are safe here and will be shared anonymously.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -47,7 +47,7 @@ export default function WhispersPage() {
         </div>
         <div className="lg:col-span-2">
           <h2 className="text-xl font-bold mb-4 font-headline">
-            Community Whispers
+            Community Stream
           </h2>
           <div className="space-y-4">
             {whispers.map((whisper, index) => (

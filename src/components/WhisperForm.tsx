@@ -19,8 +19,8 @@ import { useToast } from '@/hooks/use-toast';
 const formSchema = z.object({
   whisper: z
     .string()
-    .min(5, 'Your whisper must be at least 5 characters long.')
-    .max(280, 'Your whisper cannot be more than 280 characters.'),
+    .min(5, 'Your thought must be at least 5 characters long.')
+    .max(280, 'Your thought cannot be more than 280 characters.'),
 });
 
 export function WhisperForm() {
@@ -43,7 +43,7 @@ export function WhisperForm() {
     form.reset();
 
     toast({
-      title: 'Whisper shared',
+      title: 'Thought Shared',
       description: 'Thank you for sharing your thoughts with the community.',
     });
   }

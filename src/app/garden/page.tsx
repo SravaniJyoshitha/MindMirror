@@ -51,21 +51,21 @@ interface BadgeItem {
 const badgeData: BadgeItem[] = [
   {
     name: 'First Reflection',
-    description: 'Completed your first avatar generation.',
+    description: 'Completed your first reflection.',
     icon: Award,
   },
   {
-    name: 'Week of Wellness',
+    name: 'Weekly Check-in',
     description: 'Used the app every day for a week.',
     icon: Trophy,
   },
   {
-    name: 'Community Whisper',
-    description: 'Shared your first thought anonymously.',
+    name: 'Community Contributor',
+    description: 'Shared your first thought.',
     icon: HeartHandshake,
   },
   {
-    name: 'Growth Spurt',
+    name: 'Positive Streak',
     description: 'Logged a positive emotion for 3 days.',
     icon: Star,
   },
@@ -75,18 +75,18 @@ export default function GardenPage() {
   return (
     <div className="container mx-auto space-y-8">
       <div>
-        <h1 className="text-3xl font-headline mb-2">Gamified Growth Tracker</h1>
+        <h1 className="text-3xl font-headline mb-2">Your Progress Journal</h1>
         <p className="text-muted-foreground">
-          Visualize your emotional journey and celebrate your progress.
+          Visualize your emotional journey and celebrate your milestones.
         </p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>My Progress Garden</CardTitle>
+          <CardTitle>My Reflection History</CardTitle>
           <CardDescription>
-            Each plant represents a moment of reflection. Watch your garden grow
-            as you do.
+            Each entry represents a moment of reflection. Review your journey
+            over time.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -109,10 +109,10 @@ export default function GardenPage() {
             <div className="text-center py-12 text-muted-foreground">
               <Sprout className="w-12 h-12 mx-auto mb-4 text-chart-2" />
               <p className="font-semibold">
-                Your garden is waiting to be planted.
+                Your journal is waiting to be filled.
               </p>
               <p className="text-sm">
-                Start by reflecting on your emotions on the Avatar page.
+                Start by creating your first reflection.
               </p>
             </div>
           )}
@@ -121,9 +121,9 @@ export default function GardenPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>My Badges</CardTitle>
+          <CardTitle>My Achievements</CardTitle>
           <CardDescription>
-            Collect badges for achieving emotional milestones.
+            Collect badges for achieving personal milestones.
           </CardDescription>
         </CardHeader>
         <CardContent>

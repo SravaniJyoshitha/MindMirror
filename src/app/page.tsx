@@ -75,11 +75,11 @@ export default function AvatarPage() {
       <Card className="max-w-3xl mx-auto shadow-lg">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-headline">
-            Mirror of Emotions
+            Emotion Reflector
           </CardTitle>
           <CardDescription>
-            How are you feeling right now? Describe your emotional state, and
-            we'll generate an avatar to reflect it.
+            Describe your current emotional state to generate a visual
+            representation.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -115,7 +115,7 @@ export default function AvatarPage() {
                         Generating...
                       </>
                     ) : (
-                      'Generate My Avatar'
+                      'Generate Reflection'
                     )}
                   </Button>
                 </form>
@@ -138,7 +138,7 @@ export default function AvatarPage() {
                   <div className="text-center text-muted-foreground p-4">
                     <Bot className="h-16 w-16 mx-auto text-primary/70" />
                     <p className="text-sm mt-2">
-                      Your avatar will appear here
+                      Your reflection will appear here
                     </p>
                   </div>
                 )}
