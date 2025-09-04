@@ -37,7 +37,8 @@ export default function WhispersPage() {
             <CardHeader>
               <CardTitle>Share a Thought</CardTitle>
               <CardDescription>
-                Your thoughts are safe here and will be shared anonymously.
+                Your thoughts are safe here. Share anonymously and receive a
+                supportive reflection from our AI companion.
               </CardDescription>
             </CardHeader>
             <CardContent>
