@@ -29,13 +29,13 @@ import { Separator } from '@/components/ui/separator';
 
 const soundMap: Record<string, string> = {
   '432Hz Healing Frequency':
-    'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/432hz.mp3',
+    'https://open.spotify.com/embed/playlist/37i9dQZF1DX2v5qUXRSK2p',
   'Binaural Beats for Focus':
-    'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/binaural-beats.mp3',
+    'https://open.spotify.com/embed/playlist/37i9dQZF1DWZel4j3y8f3g',
   '528Hz Solfeggio Frequency':
-    'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/528hz.mp3',
+    'https://open.spotify.com/embed/album/1oRucM5CL0c5j1s2tC1eI4',
   'White Noise for Sleep':
-    'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/white-noise.mp3',
+    'https://open.spotify.com/embed/album/3l2a7z2n2T2F2eL3aWJ1s6',
   'Theta Waves for Meditation':
     'https://open.spotify.com/embed/album/1qMOoiQ3Ul0H5tOLOUXR7d',
 };
@@ -174,22 +174,13 @@ export default function SparksPage() {
                     <p className="text-sm text-secondary-foreground mb-4">
                       {spark.musicSuggestion.description}
                     </p>
-                    {spark.musicSuggestion.title ===
-                    'Theta Waves for Meditation' ? (
-                      <iframe
-                        src={audioSrc}
-                        width="100%"
-                        height="152"
-                        frameBorder="0"
-                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                        loading="lazy"
-                      ></iframe>
-                    ) : (
-                      <audio key={audioSrc} controls className="w-full">
-                        <source src={audioSrc} type="audio/mpeg" />
-                        Your browser does not support the audio element.
-                      </audio>
-                    )}
+                    <iframe
+                      src={audioSrc}
+                      width="100%"
+                      height="152"
+                      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                      loading="lazy"
+                    ></iframe>
                   </Card>
                 )}
 
