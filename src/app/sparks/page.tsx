@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Loader2, Zap } from 'lucide-react';
+import { Loader2, Zap, Bot } from 'lucide-react';
 import {
   getCognitiveSpark,
   type CognitiveSparkOutput,
@@ -61,7 +61,7 @@ export default function SparksPage() {
   return (
     <div className="container mx-auto flex flex-col items-center justify-center space-y-8 text-center">
       <div>
-        <h1 className="text-3xl font-headline mb-2">Cognitive Sparks</h1>
+        <h1 className="text-3xl font-headline mb-2">SparkAI Therapist</h1>
         <p className="text-muted-foreground max-w-2xl mx-auto">
           Describe a situation or a feeling, and get a tailored cognitive
           exercise to help you find a new perspective.
@@ -92,7 +92,7 @@ export default function SparksPage() {
                 />
               </div>
               <Button size="lg" onClick={handleGetSpark} className="w-full">
-                <Zap className="mr-2" />
+                <Bot className="mr-2" />
                 Generate Spark
               </Button>
             </CardContent>
