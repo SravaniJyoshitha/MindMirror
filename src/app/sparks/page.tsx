@@ -28,11 +28,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
 
 const soundMap: Record<string, string> = {
-  'Calming Rain': 'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/rain.mp3',
-  'Gentle Ocean Waves': 'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/ocean-waves.mp3',
-  'Forest Ambience': 'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/forest.mp3',
-  'Crackling Fireplace': 'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/fire.mp3',
-  'Peaceful Night': 'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/night.mp3',
+  '432Hz Healing Frequency': 'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/432hz.mp3',
+  'Binaural Beats for Focus': 'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/binaural-beats.mp3',
+  '528Hz Solfeggio Frequency': 'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/528hz.mp3',
+  'White Noise for Sleep': 'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/white-noise.mp3',
+  'Theta Waves for Meditation': 'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/theta-waves.mp3',
 };
 
 
