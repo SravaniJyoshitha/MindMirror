@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Loader2, Zap, Bot } from 'lucide-react';
+import { Loader2, Zap, Bot, Lightbulb, ShieldQuestion, CheckCircle } from 'lucide-react';
 import {
   getCognitiveSpark,
   type CognitiveSparkOutput,
@@ -18,6 +18,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
 
 export default function SparksPage() {
   const [spark, setSpark] = useState<CognitiveSparkOutput | null>(null);
@@ -68,9 +69,9 @@ export default function SparksPage() {
         </p>
       </div>
 
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-2xl">
         {!spark && !isLoading && (
-          <Card className="min-h-[20rem] p-8">
+          <Card className="p-8">
             <CardHeader>
               <CardTitle>What&apos;s on your mind?</CardTitle>
               <CardDescription>
@@ -102,25 +103,55 @@ export default function SparksPage() {
         {isLoading && (
           <Card className="flex flex-col items-center justify-center min-h-[20rem] p-8">
             <Loader2 className="w-16 h-16 text-primary animate-spin" />
-            <p className="mt-4 text-muted-foreground">Generating...</p>
+            <p className="mt-4 text-muted-foreground">Generating your Spark...</p>
           </Card>
         )}
 
         {spark && !isLoading && (
           <Card className="text-left animate-in fade-in duration-500">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Zap className="text-primary" />
-                {spark.title}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-lg">{spark.prompt}</p>
-              <div className="border-l-4 border-primary pl-4">
-                <p className="font-semibold italic text-primary-foreground bg-primary p-3 rounded-r-lg">
-                  <span className="font-bold">Spark:</span> {spark.spark}
+            <CardContent className="p-6 space-y-6">
+              <div className="p-4 bg-primary/10 rounded-lg">
+                <p className="font-semibold text-primary text-center">
+                  {spark.reassurance}
                 </p>
               </div>
+              
+              <div>
+                <CardTitle className="flex items-center gap-2 mb-2">
+                  <Zap className="text-primary" />
+                  {spark.title}
+                </CardTitle>
+                <p className="whitespace-pre-wrap">{spark.exercise}</p>
+              </div>
+
+              <Separator />
+
+              <div>
+                <h3 className="font-semibold text-lg mb-2 flex items-center gap-2">
+                  <Lightbulb className="text-accent-foreground/80"/>
+                  Key Realizations
+                </h3>
+                <ul className="space-y-2 list-inside">
+                  {spark.realizations.map((realization, index) => (
+                    <li key={index} className="flex items-start gap-2">
+                      <CheckCircle className="size-4 text-chart-2 mt-1 shrink-0" />
+                      <span>{realization}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <Separator />
+
+              <div className="p-4 bg-secondary rounded-lg">
+                <h3 className="font-semibold text-lg mb-2 flex items-center gap-2">
+                  <ShieldQuestion className="text-secondary-foreground/80" />
+                  If that doesn&apos;t work, try this:
+                </h3>
+                <p className="font-bold text-secondary-foreground">{spark.alternative.title}</p>
+                <p className="text-sm text-secondary-foreground">{spark.alternative.description}</p>
+              </div>
+
             </CardContent>
             <CardFooter>
               <Button className="w-full" onClick={handleNewSpark}>

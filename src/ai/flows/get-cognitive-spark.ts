@@ -10,29 +10,44 @@
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
 
-const CognitiveSparkInputSchema = z.string().describe('The situation the user is facing.');
+const CognitiveSparkInputSchema = z
+  .string()
+  .describe('The situation the user is facing.');
 export type CognitiveSparkInput = z.infer<typeof CognitiveSparkInputSchema>;
 
 const CognitiveSparkOutputSchema = z.object({
   title: z
     .string()
     .describe(
-      'A short, engaging title for the coping strategy (e.g., "The 5-4-3-2-1 Grounding Technique").'
+      'A short, engaging title for the main coping strategy (e.g., "The 5-4-3-2-1 Grounding Technique").'
     ),
-  prompt: z
+  reassurance: z
     .string()
     .describe(
-      'A clear, step-by-step guide for a practical coping exercise. It should be easy to follow and apply in a moment of stress or overwhelm.'
+      'A short, empathetic, and validating message that acknowledges the user\'s feelings (e.g., "It\'s completely understandable to feel anxious about exams.").'
     ),
-  spark: z
+  exercise: z
     .string()
     .describe(
-      'A concluding "spark" or insight. This is a short, memorable takeaway that explains the benefit of the exercise.'
+      'A clear, step-by-step guide for a practical coping exercise. It should be easy to follow and apply.'
     ),
+  realizations: z
+    .array(z.string())
+    .describe(
+      'A few bullet points or short sentences that offer perspective or normalize the user\'s experience, helping them understand their feelings.'
+    ),
+  alternative: z
+    .object({
+      title: z.string().describe('The title of the alternative strategy.'),
+      description: z
+        .string()
+        .describe(
+          'A brief description of a different coping strategy if the first one doesn\'t help.'
+        ),
+    })
+    .describe('An alternative coping strategy.'),
 });
-export type CognitiveSparkOutput = z.infer<
-  typeof CognitiveSparkOutputSchema
->;
+export type CognitiveSparkOutput = z.infer<typeof CognitiveSparkOutputSchema>;
 
 const prompt = ai.definePrompt({
   name: 'cognitiveSparkPrompt',
@@ -40,16 +55,18 @@ const prompt = ai.definePrompt({
   output: { schema: CognitiveSparkOutputSchema },
   prompt: `You are an AI wellness coach specializing in Cognitive Behavioral Therapy (CBT) and mindfulness techniques for young adults.
 
-Your task is to generate a single, practical coping strategy or exercise based on the user's situation. Present it as a "Cognitive Spark."
-
-- **Title:** Create a clear title for the coping strategy or exercise.
-- **Prompt:** Write a simple, step-by-step guide for the exercise. It should be a recognized technique for managing stress, anxiety, or negative thought patterns relevant to the user's situation. The tone should be instructional and supportive.
-- **Spark:** Provide a short, powerful insight that explains why this exercise is helpful or what its benefits are for the described situation.
-
-Avoid generic advice. Make the exercise practical and actionable. The goal is to provide a concrete tool the user can use immediately to manage their mental state.
+Your task is to generate a supportive and practical response based on the user's situation.
 
 User's situation:
-"{{{input}}}"`,
+"{{{input}}}"
+
+Based on this situation, generate the following:
+
+1.  **Reassurance:** Start with a short, empathetic, and validating message that acknowledges their feelings. Make them feel heard and understood.
+2.  **Title:** Create a clear title for a primary, practical coping strategy or exercise.
+3.  **Exercise:** Write a simple, step-by-step guide for the exercise. It should be a recognized technique for managing stress, anxiety, or negative thought patterns relevant to the user's situation.
+4.  **Realizations:** Provide 2-3 short, insightful bullet points that help normalize the user's experience or offer a new perspective. These should be gentle "aha" moments.
+5.  **Alternative:** Suggest one alternative coping strategy with a title and a brief description, in case the first one isn't a good fit for the user at that moment.`,
 });
 
 const getCognitiveSparkFlow = ai.defineFlow(
@@ -64,6 +81,8 @@ const getCognitiveSparkFlow = ai.defineFlow(
   }
 );
 
-export async function getCognitiveSpark(situation: CognitiveSparkInput): Promise<CognitiveSparkOutput> {
+export async function getCognitiveSpark(
+  situation: CognitiveSparkInput
+): Promise<CognitiveSparkOutput> {
   return getCognitiveSparkFlow(situation);
 }
