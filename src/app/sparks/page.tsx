@@ -23,17 +23,21 @@ import {
   getCognitiveSpark,
   type CognitiveSparkOutput,
 } from '@/ai/flows/get-cognitive-spark';
-import {
-  generateAudioSpark,
-  type GenerateAudioSparkOutput,
-} from '@/ai/flows/generate-audio-spark';
 import { useToast } from '@/hooks/use-toast';
 import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
 
+const soundMap: Record<string, string> = {
+  'Calming Rain': 'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/rain.mp3',
+  'Gentle Ocean Waves': 'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/ocean.mp3',
+  'Forest Ambience': 'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/forest.mp3',
+  'Crackling Fireplace': 'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/fire.mp3',
+  'Peaceful Night': 'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/night.mp3',
+};
+
+
 export default function SparksPage() {
   const [spark, setSpark] = useState<CognitiveSparkOutput | null>(null);
-  const [audioSpark, setAudioSpark] = useState<GenerateAudioSparkOutput | null>(null);
   const [currentSituation, setCurrentSituation] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
@@ -50,22 +54,10 @@ export default function SparksPage() {
 
     setIsLoading(true);
     setSpark(null);
-    setAudioSpark(null);
 
     try {
-      // Start both AI calls in parallel
-      const sparkPromise = getCognitiveSpark({ situation });
-      
-      const newSpark = await sparkPromise;
+      const newSpark = await getCognitiveSpark({ situation });
       setSpark(newSpark);
-
-      // Now that we have the music suggestion, generate the audio
-      if (newSpark.musicSuggestion) {
-        const audioPrompt = `${newSpark.musicSuggestion.title}. ${newSpark.musicSuggestion.description}`;
-        const newAudioSpark = await generateAudioSpark({ prompt: audioPrompt });
-        setAudioSpark(newAudioSpark);
-      }
-
     } catch (error) {
       console.error('Error generating cognitive spark:', error);
       toast({
@@ -86,13 +78,14 @@ export default function SparksPage() {
 
   const handleNewSpark = () => {
     setSpark(null);
-    setAudioSpark(null);
     setCurrentSituation('');
   };
 
   const showInputArea = !spark && !isLoading;
   const showLoading = isLoading;
   const showResults = spark && !isLoading;
+
+  const audioSrc = spark?.musicSuggestion?.title ? soundMap[spark.musicSuggestion.title] : undefined;
 
   return (
     <div className="container mx-auto flex flex-col items-center justify-center space-y-8 text-center">
@@ -162,7 +155,7 @@ export default function SparksPage() {
                     {spark.exercise}
                   </p>
                 </div>
-                
+
                 {spark.musicSuggestion && (
                   <>
                     <Separator />
@@ -177,15 +170,13 @@ export default function SparksPage() {
                       <p className="text-sm text-secondary-foreground mb-4">
                         {spark.musicSuggestion.description}
                       </p>
-                      {audioSpark?.audioDataUri ? (
-                         <audio controls className="w-full">
-                          <source src={audioSpark.audioDataUri} type="audio/wav" />
+                      {audioSrc ? (
+                         <audio controls className="w-full" src={audioSrc}>
                           Your browser does not support the audio element.
                         </audio>
                       ) : (
                         <div className="flex items-center justify-center text-sm text-muted-foreground">
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Generating audio...
+                          <p>Could not find a matching sound for the suggestion.</p>
                         </div>
                       )}
                     </div>
