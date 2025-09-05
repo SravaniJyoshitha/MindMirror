@@ -175,7 +175,7 @@ export default function SparksPage() {
           <Card className="flex flex-col items-center justify-center min-h-[20rem] p-8">
             <Loader2 className="w-16 h-16 text-primary animate-spin" />
             <p className="mt-4 text-muted-foreground">
-              {conversation.length > 1 ? 'Thinking...' : 'Generating your Spark...'}
+              {conversation.length > 1 ? 'Thinking...' : 'Analyzing your situation...'}
             </p>
           </Card>
         )}
