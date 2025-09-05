@@ -35,7 +35,7 @@ const soundMap: Record<string, string> = {
   '528Hz Solfeggio Frequency':
     'https://open.spotify.com/embed/album/1oRucM5CL0c5j1s2tC1eI4',
   'White Noise for Sleep':
-    'https://open.spotify.com/embed/album/3l2a7z2n2T2F2eL3aWJ1s6',
+    'https://open.spotify.com/embed/playlist/37i9dQZF1DWUZ5S2v2h3im',
   'Theta Waves for Meditation':
     'https://open.spotify.com/embed/album/1qMOoiQ3Ul0H5tOLOUXR7d',
 };
