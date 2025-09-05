@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -41,6 +41,20 @@ export default function SparksPage() {
   const [currentSituation, setCurrentSituation] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  const audioSrc = spark?.musicSuggestion?.title ? soundMap[spark.musicSuggestion.title] : undefined;
+
+  useEffect(() => {
+    if (audioSrc && audioRef.current) {
+      audioRef.current.load();
+      audioRef.current.play().catch(error => {
+        // Autoplay was prevented, which is common in browsers.
+        // The user can still press play manually.
+        console.info('Audio autoplay was prevented by the browser.');
+      });
+    }
+  }, [audioSrc]);
 
   const handleGenerateSpark = async (situation: string) => {
     if (!situation.trim()) {
@@ -79,13 +93,15 @@ export default function SparksPage() {
   const handleNewSpark = () => {
     setSpark(null);
     setCurrentSituation('');
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
   };
 
   const showInputArea = !spark && !isLoading;
   const showLoading = isLoading;
   const showResults = spark && !isLoading;
-
-  const audioSrc = spark?.musicSuggestion?.title ? soundMap[spark.musicSuggestion.title] : undefined;
 
   return (
     <div className="container mx-auto flex flex-col items-center justify-center space-y-8 text-center">
@@ -171,7 +187,8 @@ export default function SparksPage() {
                         {spark.musicSuggestion.description}
                       </p>
                       {audioSrc ? (
-                         <audio key={audioSrc} controls className="w-full" src={audioSrc}>
+                         <audio ref={audioRef} controls className="w-full">
+                           <source src={audioSrc} type="audio/mpeg" />
                           Your browser does not support the audio element.
                         </audio>
                       ) : (
