@@ -47,6 +47,7 @@ export default function SparksPage() {
     setIsLoading(true);
     setSpark(null);
     setConversation([{ role: 'user', content: situation }]);
+    setCurrentSituation('');
 
     try {
       const analysis: AnalyzeSituationOutput = await analyzeSituation({ situation });
@@ -66,7 +67,6 @@ export default function SparksPage() {
       });
     } finally {
       setIsLoading(false);
-      setCurrentSituation('');
     }
   };
   
@@ -84,6 +84,7 @@ export default function SparksPage() {
     const fullContext = `${initialSituation}\n\nWhen asked for more details, I added: ${followUp}`;
     
     setConversation(prev => [...prev, {role: 'user', content: followUp}]);
+    setCurrentSituation('');
 
     try {
       const newSpark = await getCognitiveSpark({ situation: fullContext });
@@ -99,7 +100,6 @@ export default function SparksPage() {
       });
     } finally {
       setIsLoading(false);
-      setCurrentSituation('');
     }
   }
 
