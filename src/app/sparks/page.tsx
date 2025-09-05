@@ -144,11 +144,10 @@ export default function SparksPage() {
                     {spark.exercise}
                   </p>
                 </div>
-
-                <Separator />
                 
                 {spark.musicSuggestion && (
                   <>
+                    <Separator />
                     <div className="p-4 bg-secondary rounded-lg">
                       <h3 className="font-semibold text-lg mb-2 flex items-center gap-2">
                         <Music className="text-secondary-foreground/80" />
@@ -161,10 +160,10 @@ export default function SparksPage() {
                         {spark.musicSuggestion.description}
                       </p>
                     </div>
-                    <Separator />
                   </>
                 )}
 
+                <Separator />
 
                 <div>
                   <h3 className="font-semibold text-lg mb-2 flex items-center gap-2">
