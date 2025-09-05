@@ -34,8 +34,8 @@ const soundMap: Record<string, string> = {
     'https://open.spotify.com/embed/playlist/37i9dQZF1DWZel4j3y8f3g',
   '528Hz Solfeggio Frequency':
     'https://open.spotify.com/embed/album/1oRucM5CL0c5j1s2tC1eI4',
-  'White Noise for Sleep':
-    'https://open.spotify.com/embed/playlist/37i9dQZF1DWUZ5S2v2h3im',
+  'Deep Sleep Delta Waves':
+    'https://open.spotify.com/embed/playlist/37i9dQZF1DWYc3C4s8yI3k',
   'Theta Waves for Meditation':
     'https://open.spotify.com/embed/album/1qMOoiQ3Ul0H5tOLOUXR7d',
 };
@@ -175,6 +175,7 @@ export default function SparksPage() {
                       {spark.musicSuggestion.description}
                     </p>
                     <iframe
+                      key={audioSrc}
                       src={audioSrc}
                       width="100%"
                       height="152"
