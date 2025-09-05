@@ -41,7 +41,6 @@ export default function SparksPage() {
   const [currentSituation, setCurrentSituation] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const audioRef = useRef<HTMLAudioElement>(null);
 
   const audioSrc = spark?.musicSuggestion?.title ? soundMap[spark.musicSuggestion.title] : undefined;
 
@@ -82,10 +81,6 @@ export default function SparksPage() {
   const handleNewSpark = () => {
     setSpark(null);
     setCurrentSituation('');
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-    }
   };
 
   const showInputArea = !spark && !isLoading;
@@ -161,28 +156,23 @@ export default function SparksPage() {
                   </p>
                 </div>
                 
-                {spark.musicSuggestion && (
-                  <>
-                    <Separator />
-                    <div className="p-4 bg-secondary rounded-lg">
-                      <h3 className="font-semibold text-lg mb-2 flex items-center gap-2">
-                        <Music className="text-secondary-foreground/80" />
-                        Audio Spark for Instant Relief
-                      </h3>
-                      <p className="font-bold text-secondary-foreground">
-                        {spark.musicSuggestion.title}
-                      </p>
-                      <p className="text-sm text-secondary-foreground mb-4">
-                        {spark.musicSuggestion.description}
-                      </p>
-                      {audioSrc && (
-                         <audio key={audioSrc} ref={audioRef} controls className="w-full">
-                           <source src={audioSrc} type="audio/mpeg" />
-                          Your browser does not support the audio element.
-                        </audio>
-                      )}
-                    </div>
-                  </>
+                {spark.musicSuggestion && audioSrc && (
+                  <Card className="p-4 bg-secondary">
+                    <h3 className="font-semibold text-lg mb-2 flex items-center gap-2">
+                      <Music className="text-secondary-foreground/80" />
+                      Audio Spark for Instant Relief
+                    </h3>
+                    <p className="font-bold text-secondary-foreground">
+                      {spark.musicSuggestion.title}
+                    </p>
+                    <p className="text-sm text-secondary-foreground mb-4">
+                      {spark.musicSuggestion.description}
+                    </p>
+                    <audio key={audioSrc} controls className="w-full">
+                      <source src={audioSrc} type="audio/mpeg" />
+                      Your browser does not support the audio element.
+                    </audio>
+                  </Card>
                 )}
 
                 <Separator />
