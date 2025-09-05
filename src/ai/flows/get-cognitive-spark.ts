@@ -86,3 +86,53 @@ export async function getCognitiveSpark(
 ): Promise<CognitiveSparkOutput> {
   return getCognitiveSparkFlow(situation);
 }
+
+const FollowUpQuestionSchema = z.object({
+  type: z.literal('question'),
+  question: z.string().describe("A gentle, empathetic follow-up question to understand the user's situation better."),
+});
+
+const DirectAnswerSchema = z.object({
+  type: z.literal('direct'),
+  analysis: z.string().describe("Internal analysis that this is a non-distress situation."),
+});
+
+
+const AnalysisSchema = z.union([FollowUpQuestionSchema, DirectAnswerSchema]);
+export type Analysis = z.infer<typeof AnalysisSchema>;
+
+
+const triagePrompt = ai.definePrompt({
+  name: 'triagePrompt',
+  input: { schema: z.string() },
+  output: { schema: AnalysisSchema },
+  prompt: `You are a compassionate triage agent for a mental wellness app. Your goal is to determine if a user is in immediate, severe distress based on their message.
+
+- If the user's message contains words like "die," "kill myself," "hopeless," "can't go on," "end it all," "alone," or other indicators of a crisis or severe emotional pain, you MUST respond with a follow-up question. The question should be gentle, open-ended, and encourage them to share more. For example: "It sounds like you're going through a lot right now. Could you tell me a little more about what's happening?" or "I hear how much pain you're in. What's been on your mind?" Set the type to "question".
+
+- If the user's message describes general anxiety, stress, or sadness without immediate crisis language (e.g., "I'm stressed about my exam," "I feel sad about my breakup," "I'm feeling overwhelmed"), you should determine that they do not need an immediate follow-up. Set the type to "direct".
+
+User's message:
+"{{{input}}}"`,
+});
+
+
+export const analyzeSituationFlow = ai.defineFlow(
+  {
+    name: 'analyzeSituationFlow',
+    inputSchema: z.string(),
+    outputSchema: AnalysisSchema,
+  },
+  async (situation) => {
+    const { output } = await triagePrompt(situation);
+    return output!;
+  }
+);
+
+export type AnalyzeSituationOutput = z.infer<typeof AnalysisSchema>;
+
+export async function analyzeSituation(
+  situation: string
+): Promise<AnalyzeSituationOutput> {
+  return analyzeSituationFlow(situation);
+}

@@ -10,23 +10,31 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Loader2, Zap, Bot, Lightbulb, ShieldQuestion, CheckCircle } from 'lucide-react';
+import { Loader2, Zap, Bot, Lightbulb, ShieldQuestion, CheckCircle, User, MessageSquare } from 'lucide-react';
 import {
   getCognitiveSpark,
   type CognitiveSparkOutput,
+  analyzeSituation,
+  type AnalyzeSituationOutput,
 } from '@/ai/flows/get-cognitive-spark';
 import { useToast } from '@/hooks/use-toast';
 import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+
+type Message = {
+  role: 'user' | 'assistant';
+  content: string;
+};
 
 export default function SparksPage() {
   const [spark, setSpark] = useState<CognitiveSparkOutput | null>(null);
-  const [situation, setSituation] = useState('');
+  const [conversation, setConversation] = useState<Message[]>([]);
+  const [currentSituation, setCurrentSituation] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [needsFollowUp, setNeedsFollowUp] = useState(false);
   const { toast } = useToast();
 
-  const handleGetSpark = async () => {
+  const handleInitialSubmit = async (situation: string) => {
     if (!situation.trim()) {
       toast({
         variant: 'destructive',
@@ -38,11 +46,51 @@ export default function SparksPage() {
 
     setIsLoading(true);
     setSpark(null);
+    setConversation([{ role: 'user', content: situation }]);
+
     try {
-      const newSpark = await getCognitiveSpark(situation);
-      setSpark(newSpark);
+      const analysis: AnalyzeSituationOutput = await analyzeSituation(situation);
+      if (analysis.type === 'question') {
+        setConversation((prev) => [...prev, { role: 'assistant', content: analysis.question }]);
+        setNeedsFollowUp(true);
+      } else {
+        const newSpark = await getCognitiveSpark(situation);
+        setSpark(newSpark);
+      }
     } catch (error) {
-      console.error('Error getting cognitive spark:', error);
+      console.error('Error during initial analysis:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Uh oh! Something went wrong.',
+        description: 'There was a problem analyzing your situation. Please try again.',
+      });
+    } finally {
+      setIsLoading(false);
+      setCurrentSituation('');
+    }
+  };
+  
+  const handleFollowUpSubmit = async (followUp: string) => {
+    if (!followUp.trim()) {
+      toast({
+        variant: 'destructive',
+        title: 'Please provide some more details.',
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    const fullContext =
+      conversation.map((msg) => `${msg.role}: ${msg.content}`).join('\n') + `\nuser: ${followUp}`;
+    
+    setConversation(prev => [...prev, {role: 'user', content: followUp}]);
+
+    try {
+      const newSpark = await getCognitiveSpark(fullContext);
+      setSpark(newSpark);
+      setNeedsFollowUp(false);
+    } catch (error) {
+      console.error('Error getting cognitive spark after follow-up:', error);
       toast({
         variant: 'destructive',
         title: 'Uh oh! Something went wrong.',
@@ -51,12 +99,25 @@ export default function SparksPage() {
       });
     } finally {
       setIsLoading(false);
+      setCurrentSituation('');
+    }
+  }
+
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (needsFollowUp) {
+      handleFollowUpSubmit(currentSituation);
+    } else {
+      handleInitialSubmit(currentSituation);
     }
   };
 
   const handleNewSpark = () => {
     setSpark(null);
-    setSituation('');
+    setConversation([]);
+    setCurrentSituation('');
+    setNeedsFollowUp(false);
   };
 
   return (
@@ -71,39 +132,51 @@ export default function SparksPage() {
 
       <div className="w-full max-w-2xl">
         {!spark && !isLoading && (
-          <Card className="p-8">
+          <Card className="p-4 sm:p-8">
             <CardHeader>
-              <CardTitle>What&apos;s on your mind?</CardTitle>
-              <CardDescription>
-                Briefly describe the situation you&apos;re facing.
+              <CardTitle>{needsFollowUp ? "Tell me more" : "What's on your mind?"}</CardTitle>
+               <CardDescription>
+                {needsFollowUp
+                  ? 'Your response will help me understand better.'
+                  : "Briefly describe the situation you're facing."}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid w-full gap-1.5">
-                <Label htmlFor="situation" className="sr-only">
-                  Your Situation
-                </Label>
+              <div className="text-left space-y-4">
+                {conversation.map((msg, index) => (
+                  <div key={index} className={`flex items-start gap-3 ${msg.role === 'user' ? 'justify-end' : ''}`}>
+                    {msg.role === 'assistant' && <div className="p-2 bg-primary/10 rounded-full"><Bot className="size-5 text-primary" /></div>}
+                    <div className={`p-3 rounded-lg max-w-[80%] ${msg.role === 'assistant' ? 'bg-secondary' : 'bg-primary text-primary-foreground'}`}>
+                      <p>{msg.content}</p>
+                    </div>
+                     {msg.role === 'user' && <div className="p-2 bg-muted rounded-full"><User className="size-5 text-muted-foreground" /></div>}
+                  </div>
+                ))}
+              </div>
+              <form onSubmit={handleFormSubmit} className="grid w-full gap-2">
                 <Textarea
                   id="situation"
-                  placeholder="e.g., I'm feeling anxious about a big presentation..."
-                  value={situation}
-                  onChange={(e) => setSituation(e.target.value)}
+                  placeholder={needsFollowUp ? "You can tell me here..." : "e.g., I'm feeling anxious about a big presentation..."}
+                  value={currentSituation}
+                  onChange={(e) => setCurrentSituation(e.target.value)}
                   rows={4}
                   className="resize-none"
                 />
-              </div>
-              <Button size="lg" onClick={handleGetSpark} className="w-full">
-                <Bot className="mr-2" />
-                Generate Spark
-              </Button>
+                <Button size="lg" type="submit" className="w-full">
+                  <MessageSquare className="mr-2" />
+                  {needsFollowUp ? 'Send' : 'Generate Spark'}
+                </Button>
+              </form>
             </CardContent>
           </Card>
         )}
 
-        {isLoading && (
+        {isLoading && !spark && (
           <Card className="flex flex-col items-center justify-center min-h-[20rem] p-8">
             <Loader2 className="w-16 h-16 text-primary animate-spin" />
-            <p className="mt-4 text-muted-foreground">Generating your Spark...</p>
+            <p className="mt-4 text-muted-foreground">
+              {conversation.length > 1 ? 'Thinking...' : 'Generating your Spark...'}
+            </p>
           </Card>
         )}
 
@@ -155,7 +228,7 @@ export default function SparksPage() {
             </CardContent>
             <CardFooter>
               <Button className="w-full" onClick={handleNewSpark}>
-                Generate Another Spark
+                Start a New Session
               </Button>
             </CardFooter>
           </Card>
