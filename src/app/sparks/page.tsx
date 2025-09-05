@@ -80,8 +80,9 @@ export default function SparksPage() {
     }
 
     setIsLoading(true);
-    const fullContext =
-      conversation.map((msg) => `${msg.role}: ${msg.content}`).join('\n') + `\nuser: ${followUp}`;
+    // Combine the initial situation and the follow-up into a coherent narrative.
+    const initialSituation = conversation.find(msg => msg.role === 'user')?.content || '';
+    const fullContext = `${initialSituation}\n\nThen, when asked for more details, I added: ${followUp}`;
     
     setConversation(prev => [...prev, {role: 'user', content: followUp}]);
 
