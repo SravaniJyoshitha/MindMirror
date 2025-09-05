@@ -13,12 +13,19 @@ import { Label } from '@/components/ui/label';
 import { Sparkles } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
+const AUTH_KEY = 'mindmirror-auth';
+
 export default function LoginPage() {
   const router = useRouter();
 
   const handleLogin = () => {
     // In a real app, you'd have authentication logic here.
     // For this prototype, we'll just navigate to the home page.
+    try {
+      localStorage.setItem(AUTH_KEY, 'true');
+    } catch (error) {
+      console.error('Could not set auth status in local storage', error);
+    }
     router.push('/');
   };
 
