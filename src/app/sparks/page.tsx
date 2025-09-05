@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -29,7 +29,7 @@ import { Separator } from '@/components/ui/separator';
 
 const soundMap: Record<string, string> = {
   'Calming Rain': 'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/rain.mp3',
-  'Gentle Ocean Waves': 'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/ocean.mp3',
+  'Gentle Ocean Waves': 'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/ocean-waves.mp3',
   'Forest Ambience': 'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/forest.mp3',
   'Crackling Fireplace': 'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/fire.mp3',
   'Peaceful Night': 'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/night.mp3',
