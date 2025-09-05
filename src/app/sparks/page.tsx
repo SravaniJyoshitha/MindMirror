@@ -116,12 +116,12 @@ export default function SparksPage() {
                 </p>
               </div>
               
-              <div>
+              <div className="border border-border rounded-lg p-4">
                 <CardTitle className="flex items-center gap-2 mb-2">
                   <Zap className="text-primary" />
-                  {spark.title}
+                  Cognitive Exercise: {spark.title}
                 </CardTitle>
-                <p className="whitespace-pre-wrap">{spark.exercise}</p>
+                <p className="whitespace-pre-wrap text-muted-foreground">{spark.exercise}</p>
               </div>
 
               <Separator />
@@ -146,7 +146,7 @@ export default function SparksPage() {
               <div className="p-4 bg-secondary rounded-lg">
                 <h3 className="font-semibold text-lg mb-2 flex items-center gap-2">
                   <ShieldQuestion className="text-secondary-foreground/80" />
-                  If that doesn&apos;t work, try this:
+                  Alternative Strategy
                 </h3>
                 <p className="font-bold text-secondary-foreground">{spark.alternative.title}</p>
                 <p className="text-sm text-secondary-foreground">{spark.alternative.description}</p>
