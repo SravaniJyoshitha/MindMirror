@@ -58,7 +58,7 @@ const prompt = ai.definePrompt({
 Your task is to respond to the user's situation with a combination of encouragement, practical exercises, and realistic alternatives. Your response must feel like it's coming from someone who truly understands and cares.
 
 User's situation:
-"{{{input}}}"
+"{{{this}}}"
 
 Based on this situation, generate the following:
 
@@ -113,7 +113,7 @@ const triagePrompt = ai.definePrompt({
 - If the user's message describes general anxiety, stress, or sadness without immediate crisis language (e.g., "I'm stressed about my exam," "I feel sad about my breakup," "I'm feeling overwhelmed"), you should determine that they do not need an immediate follow-up. Set the type to "direct".
 
 User's message:
-"{{{input}}}"`,
+"{{{this}}}"`,
 });
 
 
