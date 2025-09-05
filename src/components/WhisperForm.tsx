@@ -22,6 +22,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { format } from 'date-fns';
 
 const formSchema = z.object({
   whisper: z
@@ -29,6 +30,25 @@ const formSchema = z.object({
     .min(5, 'Your thought must be at least 5 characters long.')
     .max(280, 'Your thought cannot be more than 280 characters.'),
 });
+
+const saveReflection = (thought: string) => {
+  try {
+    const existingReflections = localStorage.getItem('reflections');
+    const reflections = existingReflections ? JSON.parse(existingReflections) : [];
+    
+    const newReflection = {
+      thought,
+      date: format(new Date(), "MMM d, yyyy"),
+    };
+    
+    reflections.push(newReflection);
+    localStorage.setItem('reflections', JSON.stringify(reflections));
+
+  } catch (error) {
+    console.error("Could not save reflection to local storage", error);
+  }
+};
+
 
 export function WhisperForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -49,10 +69,13 @@ export function WhisperForm() {
       const response = await reflectOnThought(values.whisper);
       setReflection(response.reflection);
       setIsDialogOpen(true);
+      
+      saveReflection(values.whisper);
+
       form.reset();
       toast({
         title: 'Thought Shared',
-        description: 'Thank you for sharing your thoughts with the community.',
+        description: 'Thank you for sharing. Your reflection has been added to your journal.',
       });
     } catch (error) {
       console.error('Error reflecting on thought:', error);

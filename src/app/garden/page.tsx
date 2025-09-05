@@ -1,3 +1,4 @@
+'use client';
 import {
   Card,
   CardContent,
@@ -14,33 +15,31 @@ import {
   Star,
   HeartHandshake,
   TreePine,
+  Feather,
+  Sun,
+  Moon,
+  Wind,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 interface GardenItem {
+  thought: string;
   date: string;
-  emotion: string;
   icon: LucideIcon;
   color: string;
 }
 
-const gardenData: GardenItem[] = [
-  {
-    date: 'Yesterday',
-    emotion: 'Peaceful',
-    icon: Sprout,
-    color: 'text-chart-2',
-  },
-  { date: '2 days ago', emotion: 'Hopeful', icon: Leaf, color: 'text-chart-4' },
-  { date: '4 days ago', emotion: 'Joyful', icon: Flower2, color: 'text-chart-5' },
-  { date: 'Last week', emotion: 'Content', icon: Sprout, color: 'text-chart-2' },
-  {
-    date: '2 weeks ago',
-    emotion: 'Grounded',
-    icon: TreePine,
-    color: 'text-chart-3',
-  },
+const iconOptions: { icon: LucideIcon; color: string }[] = [
+  { icon: Sprout, color: 'text-chart-2' },
+  { icon: Leaf, color: 'text-chart-4' },
+  { icon: Flower2, color: 'text-chart-5' },
+  { icon: TreePine, color: 'text-chart-3' },
+  { icon: Feather, color: 'text-chart-1' },
+  { icon: Sun, color: 'text-chart-4' },
+  { icon: Moon, color: 'text-chart-3' },
+  { icon: Wind, color: 'text-chart-2' },
 ];
 
 interface BadgeItem {
@@ -73,6 +72,29 @@ const badgeData: BadgeItem[] = [
 ];
 
 export default function GardenPage() {
+  const [gardenData, setGardenData] = useState<GardenItem[]>([]);
+
+  useEffect(() => {
+    try {
+      const storedReflections = localStorage.getItem('reflections');
+      if (storedReflections) {
+        const parsedReflections: { thought: string; date: string }[] =
+          JSON.parse(storedReflections);
+        const gardenItems = parsedReflections.map((item, index) => {
+          const iconInfo = iconOptions[index % iconOptions.length];
+          return {
+            ...item,
+            ...iconInfo,
+          };
+        });
+        setGardenData(gardenItems.reverse()); // Show most recent first
+      }
+    } catch (error) {
+      console.error('Failed to parse reflections from localStorage', error);
+      setGardenData([]);
+    }
+  }, []);
+
   return (
     <div className="container mx-auto space-y-8">
       <div>
@@ -101,7 +123,7 @@ export default function GardenPage() {
                   <item.icon
                     className={`w-16 h-16 ${item.color} mb-2 transition-transform duration-500`}
                   />
-                  <p className="font-semibold">{item.emotion}</p>
+                  <p className="font-semibold text-center truncate w-full" title={item.thought}>"{item.thought}"</p>
                   <p className="text-xs text-muted-foreground">{item.date}</p>
                 </div>
               ))}
