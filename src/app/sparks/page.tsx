@@ -10,7 +10,15 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Loader2, Zap, Lightbulb, ShieldQuestion, CheckCircle, MessageSquare } from 'lucide-react';
+import {
+  Loader2,
+  Zap,
+  Lightbulb,
+  ShieldQuestion,
+  CheckCircle,
+  MessageSquare,
+  Music,
+} from 'lucide-react';
 import {
   getCognitiveSpark,
   type CognitiveSparkOutput,
@@ -46,11 +54,11 @@ export default function SparksPage() {
       toast({
         variant: 'destructive',
         title: 'Uh oh! Something went wrong.',
-        description: 'There was a problem generating your spark. Please try again.',
+        description:
+          'There was a problem generating your spark. Please try again.',
       });
     } finally {
       setIsLoading(false);
-      setCurrentSituation('');
     }
   };
 
@@ -126,20 +134,41 @@ export default function SparksPage() {
                     {spark.reassurance}
                   </p>
                 </div>
-                
+
                 <div className="border border-border rounded-lg p-4">
                   <CardTitle className="flex items-center gap-2 mb-2">
                     <Zap className="text-primary" />
                     Cognitive Exercise: {spark.title}
                   </CardTitle>
-                  <p className="whitespace-pre-wrap text-muted-foreground">{spark.exercise}</p>
+                  <p className="whitespace-pre-wrap text-muted-foreground">
+                    {spark.exercise}
+                  </p>
                 </div>
 
                 <Separator />
+                
+                {spark.musicSuggestion && (
+                  <>
+                    <div className="p-4 bg-secondary rounded-lg">
+                      <h3 className="font-semibold text-lg mb-2 flex items-center gap-2">
+                        <Music className="text-secondary-foreground/80" />
+                        Music Suggestion
+                      </h3>
+                      <p className="font-bold text-secondary-foreground">
+                        {spark.musicSuggestion.title}
+                      </p>
+                      <p className="text-sm text-secondary-foreground">
+                        {spark.musicSuggestion.description}
+                      </p>
+                    </div>
+                    <Separator />
+                  </>
+                )}
+
 
                 <div>
                   <h3 className="font-semibold text-lg mb-2 flex items-center gap-2">
-                    <Lightbulb className="text-accent-foreground/80"/>
+                    <Lightbulb className="text-accent-foreground/80" />
                     Key Realizations
                   </h3>
                   <ul className="space-y-2 list-inside">
@@ -159,10 +188,13 @@ export default function SparksPage() {
                     <ShieldQuestion className="text-secondary-foreground/80" />
                     Instant Coping Strategy
                   </h3>
-                  <p className="font-bold text-secondary-foreground">{spark.instantCopingStrategy.title}</p>
-                  <p className="text-sm text-secondary-foreground">{spark.instantCopingStrategy.description}</p>
+                  <p className="font-bold text-secondary-foreground">
+                    {spark.instantCopingStrategy.title}
+                  </p>
+                  <p className="text-sm text-secondary-foreground">
+                    {spark.instantCopingStrategy.description}
+                  </p>
                 </div>
-
               </CardContent>
               <CardFooter>
                 <Button className="w-full" onClick={handleNewSpark}>
