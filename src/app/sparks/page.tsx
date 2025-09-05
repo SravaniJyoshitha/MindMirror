@@ -171,7 +171,7 @@ export default function SparksPage() {
                         {spark.musicSuggestion.description}
                       </p>
                       {audioSrc ? (
-                         <audio controls className="w-full" src={audioSrc}>
+                         <audio key={audioSrc} controls className="w-full" src={audioSrc}>
                           Your browser does not support the audio element.
                         </audio>
                       ) : (
