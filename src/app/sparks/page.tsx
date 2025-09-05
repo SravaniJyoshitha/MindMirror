@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -44,17 +44,6 @@ export default function SparksPage() {
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const audioSrc = spark?.musicSuggestion?.title ? soundMap[spark.musicSuggestion.title] : undefined;
-
-  useEffect(() => {
-    if (audioSrc && audioRef.current) {
-      audioRef.current.load();
-      audioRef.current.play().catch(error => {
-        // Autoplay was prevented, which is common in browsers.
-        // The user can still press play manually.
-        console.info('Audio autoplay was prevented by the browser.');
-      });
-    }
-  }, [audioSrc]);
 
   const handleGenerateSpark = async (situation: string) => {
     if (!situation.trim()) {
@@ -171,7 +160,7 @@ export default function SparksPage() {
                     {spark.exercise}
                   </p>
                 </div>
-
+                
                 {spark.musicSuggestion && (
                   <>
                     <Separator />
@@ -186,15 +175,11 @@ export default function SparksPage() {
                       <p className="text-sm text-secondary-foreground mb-4">
                         {spark.musicSuggestion.description}
                       </p>
-                      {audioSrc ? (
-                         <audio ref={audioRef} controls className="w-full">
+                      {audioSrc && (
+                         <audio key={audioSrc} ref={audioRef} controls className="w-full">
                            <source src={audioSrc} type="audio/mpeg" />
                           Your browser does not support the audio element.
                         </audio>
-                      ) : (
-                        <div className="flex items-center justify-center text-sm text-muted-foreground">
-                          <p>Could not find a matching sound for the suggestion.</p>
-                        </div>
                       )}
                     </div>
                   </>
