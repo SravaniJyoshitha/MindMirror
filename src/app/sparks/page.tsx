@@ -28,13 +28,17 @@ import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
 
 const soundMap: Record<string, string> = {
-  '432Hz Healing Frequency': 'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/432hz.mp3',
-  'Binaural Beats for Focus': 'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/binaural-beats.mp3',
-  '528Hz Solfeggio Frequency': 'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/528hz.mp3',
-  'White Noise for Sleep': 'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/white-noise.mp3',
-  'Theta Waves for Meditation': 'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/theta-waves.mp3',
+  '432Hz Healing Frequency':
+    'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/432hz.mp3',
+  'Binaural Beats for Focus':
+    'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/binaural-beats.mp3',
+  '528Hz Solfeggio Frequency':
+    'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/528hz.mp3',
+  'White Noise for Sleep':
+    'https://storage.googleapis.com/studiopa-prod-request-tool-images/assets/white-noise.mp3',
+  'Theta Waves for Meditation':
+    'https://open.spotify.com/embed/album/1qMOoiQ3Ul0H5tOLOUXR7d',
 };
-
 
 export default function SparksPage() {
   const [spark, setSpark] = useState<CognitiveSparkOutput | null>(null);
@@ -42,7 +46,9 @@ export default function SparksPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const audioSrc = spark?.musicSuggestion?.title ? soundMap[spark.musicSuggestion.title] : undefined;
+  const audioSrc = spark?.musicSuggestion?.title
+    ? soundMap[spark.musicSuggestion.title]
+    : undefined;
 
   const handleGenerateSpark = async (situation: string) => {
     if (!situation.trim()) {
@@ -155,7 +161,7 @@ export default function SparksPage() {
                     {spark.exercise}
                   </p>
                 </div>
-                
+
                 {spark.musicSuggestion && audioSrc && (
                   <Card className="p-4 bg-secondary">
                     <h3 className="font-semibold text-lg mb-2 flex items-center gap-2">
@@ -168,10 +174,22 @@ export default function SparksPage() {
                     <p className="text-sm text-secondary-foreground mb-4">
                       {spark.musicSuggestion.description}
                     </p>
-                    <audio key={audioSrc} controls className="w-full">
-                      <source src={audioSrc} type="audio/mpeg" />
-                      Your browser does not support the audio element.
-                    </audio>
+                    {spark.musicSuggestion.title ===
+                    'Theta Waves for Meditation' ? (
+                      <iframe
+                        src={audioSrc}
+                        width="100%"
+                        height="152"
+                        frameBorder="0"
+                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                        loading="lazy"
+                      ></iframe>
+                    ) : (
+                      <audio key={audioSrc} controls className="w-full">
+                        <source src={audioSrc} type="audio/mpeg" />
+                        Your browser does not support the audio element.
+                      </audio>
+                    )}
                   </Card>
                 )}
 
