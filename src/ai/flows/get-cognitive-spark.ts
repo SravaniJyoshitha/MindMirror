@@ -10,9 +10,9 @@
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
 
-const CognitiveSparkInputSchema = z
-  .string()
-  .describe('The situation the user is facing.');
+const CognitiveSparkInputSchema = z.object({
+  situation: z.string().describe('The situation the user is facing.'),
+});
 export type CognitiveSparkInput = z.infer<typeof CognitiveSparkInputSchema>;
 
 const CognitiveSparkOutputSchema = z.object({
@@ -58,7 +58,7 @@ const prompt = ai.definePrompt({
 Your task is to respond to the user's situation with a combination of encouragement, practical exercises, and realistic alternatives. Your response must feel like it's coming from someone who truly understands and cares.
 
 User's situation:
-"{{{this}}}"
+"{{{situation}}}"
 
 Based on this situation, generate the following:
 
@@ -75,36 +75,45 @@ const getCognitiveSparkFlow = ai.defineFlow(
     inputSchema: CognitiveSparkInputSchema,
     outputSchema: CognitiveSparkOutputSchema,
   },
-  async (situation) => {
-    const { output } = await prompt(situation);
+  async (input) => {
+    const { output } = await prompt(input);
     return output!;
   }
 );
 
 export async function getCognitiveSpark(
-  situation: CognitiveSparkInput
+  input: CognitiveSparkInput
 ): Promise<CognitiveSparkOutput> {
-  return getCognitiveSparkFlow(situation);
+  return getCognitiveSparkFlow(input);
 }
 
 const FollowUpQuestionSchema = z.object({
   type: z.literal('question'),
-  question: z.string().describe("A gentle, empathetic follow-up question to understand the user's situation better."),
+  question: z
+    .string()
+    .describe(
+      "A gentle, empathetic follow-up question to understand the user's situation better."
+    ),
 });
 
 const DirectAnswerSchema = z.object({
   type: z.literal('direct'),
-  analysis: z.string().describe("Internal analysis that this is a non-distress situation."),
+  analysis: z
+    .string()
+    .describe('Internal analysis that this is a non-distress situation.'),
 });
-
 
 const AnalysisSchema = z.union([FollowUpQuestionSchema, DirectAnswerSchema]);
 export type Analysis = z.infer<typeof AnalysisSchema>;
 
+const TriageInputSchema = z.object({
+  situation: z.string(),
+});
+export type TriageInput = z.infer<typeof TriageInputSchema>;
 
 const triagePrompt = ai.definePrompt({
   name: 'triagePrompt',
-  input: { schema: z.string() },
+  input: { schema: TriageInputSchema },
   output: { schema: AnalysisSchema },
   prompt: `You are a compassionate triage agent for a mental wellness app. Your goal is to determine if a user is in immediate, severe distress based on their message.
 
@@ -113,18 +122,17 @@ const triagePrompt = ai.definePrompt({
 - If the user's message describes general anxiety, stress, or sadness without immediate crisis language (e.g., "I'm stressed about my exam," "I feel sad about my breakup," "I'm feeling overwhelmed"), you should determine that they do not need an immediate follow-up. Set the type to "direct".
 
 User's message:
-"{{{this}}}"`,
+"{{{situation}}}"`,
 });
-
 
 export const analyzeSituationFlow = ai.defineFlow(
   {
     name: 'analyzeSituationFlow',
-    inputSchema: z.string(),
+    inputSchema: TriageInputSchema,
     outputSchema: AnalysisSchema,
   },
-  async (situation) => {
-    const { output } = await triagePrompt(situation);
+  async (input) => {
+    const { output } = await triagePrompt(input);
     return output!;
   }
 );
@@ -132,7 +140,7 @@ export const analyzeSituationFlow = ai.defineFlow(
 export type AnalyzeSituationOutput = z.infer<typeof AnalysisSchema>;
 
 export async function analyzeSituation(
-  situation: string
+  input: TriageInput
 ): Promise<AnalyzeSituationOutput> {
-  return analyzeSituationFlow(situation);
+  return analyzeSituationFlow(input);
 }

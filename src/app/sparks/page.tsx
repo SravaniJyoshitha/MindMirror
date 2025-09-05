@@ -49,12 +49,12 @@ export default function SparksPage() {
     setConversation([{ role: 'user', content: situation }]);
 
     try {
-      const analysis: AnalyzeSituationOutput = await analyzeSituation(situation);
+      const analysis: AnalyzeSituationOutput = await analyzeSituation({ situation });
       if (analysis.type === 'question') {
         setConversation((prev) => [...prev, { role: 'assistant', content: analysis.question }]);
         setNeedsFollowUp(true);
       } else {
-        const newSpark = await getCognitiveSpark(situation);
+        const newSpark = await getCognitiveSpark({ situation });
         setSpark(newSpark);
       }
     } catch (error) {
@@ -80,14 +80,13 @@ export default function SparksPage() {
     }
 
     setIsLoading(true);
-    // Combine the initial situation and the follow-up into a coherent narrative.
     const initialSituation = conversation.find(msg => msg.role === 'user')?.content || '';
-    const fullContext = `${initialSituation}\n\nThen, when asked for more details, I added: ${followUp}`;
+    const fullContext = `${initialSituation}\n\nWhen asked for more details, I added: ${followUp}`;
     
     setConversation(prev => [...prev, {role: 'user', content: followUp}]);
 
     try {
-      const newSpark = await getCognitiveSpark(fullContext);
+      const newSpark = await getCognitiveSpark({ situation: fullContext });
       setSpark(newSpark);
       setNeedsFollowUp(false);
     } catch (error) {
