@@ -31,7 +31,7 @@ export default function SparksPage() {
       toast({
         variant: 'destructive',
         title: 'Please describe your situation.',
-        description: 'We need to know what you\'re going through to help.',
+        description: "We need to know what you're going through to help.",
       });
       return;
     }
@@ -146,10 +146,10 @@ export default function SparksPage() {
               <div className="p-4 bg-secondary rounded-lg">
                 <h3 className="font-semibold text-lg mb-2 flex items-center gap-2">
                   <ShieldQuestion className="text-secondary-foreground/80" />
-                  Alternative Strategy
+                  Instant Coping Strategy
                 </h3>
-                <p className="font-bold text-secondary-foreground">{spark.alternative.title}</p>
-                <p className="text-sm text-secondary-foreground">{spark.alternative.description}</p>
+                <p className="font-bold text-secondary-foreground">{spark.instantCopingStrategy.title}</p>
+                <p className="text-sm text-secondary-foreground">{spark.instantCopingStrategy.description}</p>
               </div>
 
             </CardContent>
