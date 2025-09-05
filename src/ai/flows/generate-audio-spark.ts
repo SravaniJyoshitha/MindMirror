@@ -63,8 +63,9 @@ const generateAudioSparkFlow = ai.defineFlow(
     outputSchema: GenerateAudioSparkOutputSchema,
   },
   async ({ prompt }) => {
-    // This is an experimental feature and may not produce musical results.
-    // The prompt guides the model to generate a soundscape.
+    // Generate a short, spoken-word guided audio for immediate relief.
+    const audioPrompt = `Create a very short, calming guided audio script. The theme is: "${prompt}". Speak slowly and gently. For example: "Breathe in deeply... and release. Focus on the feeling of calm. You are safe in this moment."`;
+
     const { media } = await ai.generate({
       model: googleAI.model('gemini-2.5-flash-preview-tts'),
       config: {
@@ -75,7 +76,7 @@ const generateAudioSparkFlow = ai.defineFlow(
           },
         },
       },
-      prompt: `(Soundscape) ${prompt}. Synthesize a short, calming audio experience based on this description.`,
+      prompt: audioPrompt,
     });
 
     if (!media) {
