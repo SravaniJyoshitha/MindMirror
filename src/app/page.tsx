@@ -36,7 +36,7 @@ export default function HomePage() {
             </CardHeader>
             <CardContent className="flex-grow">
               <p>
-                {isChild ? 'Tell me what\'s on your mind and I\'ll give you some fun activities to feel better.' : 'Describe what\'s on your mind and receive tailored coping strategies and exercises to reframe your thoughts.'}
+                {isChild ? 'If you feel sad, angry, or lost, I can suggest fun activities like breathing exercises, drawing prompts, or games to help you understand your feelings and feel better.' : 'Describe what\'s on your mind and receive evidence-based cognitive reframing techniques, mindfulness exercises, and practical coping strategies to navigate challenges.'}
               </p>
             </CardContent>
             <div className="p-6 pt-0">
