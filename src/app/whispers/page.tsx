@@ -82,12 +82,12 @@ export default function WhispersPage() {
       <div className="flex justify-between items-start">
         <div>
           <h1 className="text-3xl font-headline mb-2">
-            {isChild ? 'Find a Helper' : 'Connect with a Therapist'}
+            {isChild ? 'Helpers & Friends' : 'Community & Support'}
           </h1>
           <p className="text-muted-foreground">
             {isChild
-              ? "Talk to a grown-up who can help with your feelings."
-              : 'Find professional therapists available for a session.'}
+              ? "Talk to a grown-up helper or connect with friends."
+              : 'Find professional therapists or connect with peers.'}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -101,10 +101,14 @@ export default function WhispersPage() {
           </Button>
         </div>
       </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-1">
-           <Card className="sticky top-24 shadow-lg">
+      
+      <Tabs defaultValue="therapists" className="w-full">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="therapists">{isChild ? 'Find a Helper' : 'Connect with a Therapist'}</TabsTrigger>
+          <TabsTrigger value="friends">{isChild ? 'Friends & Community' : 'Connect with Friends'}</TabsTrigger>
+        </TabsList>
+        <TabsContent value="therapists" className="mt-4">
+           <Card>
             <CardHeader>
               <CardTitle>
                 {isChild ? 'Available Helpers' : 'Available Therapists'}
@@ -143,63 +147,79 @@ export default function WhispersPage() {
               ))}
             </CardContent>
           </Card>
-        </div>
-        <div className="lg:col-span-2">
-          <Tabs defaultValue="stream">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="stream">
-                {isChild ? 'Feelings from Others' : 'Community Stream'}
-              </TabsTrigger>
-              <TabsTrigger value="friends">{isChild ? 'My Friends' : 'Friends'}</TabsTrigger>
-            </TabsList>
-            <TabsContent value="stream" className="mt-4">
-              <div className="space-y-4">
-                {whispers.map((whisper, index) => (
-                  <Card key={index} className="bg-card/80">
-                    <CardContent className="p-4">
-                      <p className="italic text-card-foreground">
-                        “{whisper}”
-                      </p>
+        </TabsContent>
+        <TabsContent value="friends" className="mt-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+             <div className="lg:col-span-2">
+              <Tabs defaultValue="stream">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="stream">
+                    {isChild ? 'Feelings from Others' : 'Community Stream'}
+                  </TabsTrigger>
+                  <TabsTrigger value="friends">{isChild ? 'My Friends' : 'Friends List'}</TabsTrigger>
+                </TabsList>
+                <TabsContent value="stream" className="mt-4">
+                  <div className="space-y-4">
+                    {whispers.map((whisper, index) => (
+                      <Card key={index} className="bg-card/80">
+                        <CardContent className="p-4">
+                          <p className="italic text-card-foreground">
+                            “{whisper}”
+                          </p>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </TabsContent>
+                <TabsContent value="friends" className="mt-4">
+                   <Card>
+                    <CardHeader>
+                      <CardTitle>{isChild ? 'Your Friends' : 'Your Friends'}</CardTitle>
+                      <CardDescription>{isChild ? 'You can add friends and chat with them!' : 'Find and connect with others in the community.'}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {friends.map((friend) => (
+                        <div key={friend.name} className="flex items-center justify-between p-2 rounded-lg hover:bg-accent/50">
+                          <div className="flex items-center gap-4">
+                            <Avatar>
+                               <AvatarImage src={friend.avatar} alt={friend.name} />
+                              <AvatarFallback>{friend.name.charAt(0)}</AvatarFallback>
+                               <span className={`absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full ${friend.status === 'online' ? 'bg-green-500' : 'bg-gray-400'} ring-2 ring-background`} />
+                            </Avatar>
+                            <p className="font-semibold">{friend.name}</p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Button variant="outline" size="sm">
+                              <UserPlus className="mr-2" />
+                              {isChild ? 'Add' : 'Add Friend'}
+                            </Button>
+                             <Button variant="secondary" size="sm">
+                              <MessageSquarePlus className="mr-2" />
+                               {isChild ? 'Chat' : 'Chat'}
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
                     </CardContent>
                   </Card>
-                ))}
-              </div>
-            </TabsContent>
-            <TabsContent value="friends" className="mt-4">
-               <Card>
+                </TabsContent>
+              </Tabs>
+            </div>
+            <div className="lg:col-span-1">
+              <Card className="sticky top-24 shadow-lg">
                 <CardHeader>
-                  <CardTitle>{isChild ? 'Connect with Friends' : 'Connect with Others'}</CardTitle>
-                  <CardDescription>{isChild ? 'You can add friends and chat with them!' : 'Find and connect with others in the community.'}</CardDescription>
+                  <CardTitle>Community Guidelines</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  {friends.map((friend) => (
-                    <div key={friend.name} className="flex items-center justify-between p-2 rounded-lg hover:bg-accent/50">
-                      <div className="flex items-center gap-4">
-                        <Avatar>
-                           <AvatarImage src={friend.avatar} alt={friend.name} />
-                          <AvatarFallback>{friend.name.charAt(0)}</AvatarFallback>
-                           <span className={`absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full ${friend.status === 'online' ? 'bg-green-500' : 'bg-gray-400'} ring-2 ring-background`} />
-                        </Avatar>
-                        <p className="font-semibold">{friend.name}</p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Button variant="outline" size="sm">
-                          <UserPlus className="mr-2" />
-                          {isChild ? 'Add' : 'Add Friend'}
-                        </Button>
-                         <Button variant="secondary" size="sm">
-                          <MessageSquarePlus className="mr-2" />
-                           {isChild ? 'Chat' : 'Chat'}
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
+                <CardContent className="text-sm text-muted-foreground space-y-2">
+                  <p><strong>Be Kind & Respectful:</strong> Treat everyone with kindness. No bullying or mean comments.</p>
+                  <p><strong>Share with Care:</strong> Be mindful of what you share. Avoid posting personal information.</p>
+                  <p><strong>Support Each Other:</strong> Offer encouragement and support to fellow community members.</p>
                 </CardContent>
               </Card>
-            </TabsContent>
-          </Tabs>
-        </div>
-      </div>
+            </div>
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
