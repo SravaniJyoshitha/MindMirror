@@ -198,7 +198,7 @@ export default function WhispersPage() {
                         <div className="flex items-start gap-3">
                            <Info className="size-5 text-primary shrink-0 mt-0.5" />
                           <div>
-                            <p className="font-bold text-primary">You are not alone.</p>
+                            <p className="text-lg font-bold text-primary">You are not alone.</p>
                             <p className="text-sm text-primary/80">This is an anonymous stream of thoughts from other users. It's a reminder that many people share similar feelings, and you're part of a community that understands.</p>
                           </div>
                         </div>
