@@ -2,7 +2,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Loader2, Sparkles } from 'lucide-react';
+import { Loader2, Sparkles, Smile } from 'lucide-react';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -23,6 +23,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { format } from 'date-fns';
+import { useAge } from '@/app/layout';
 
 const formSchema = z.object({
   whisper: z
@@ -55,6 +56,7 @@ export function WhisperForm() {
   const [reflection, setReflection] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
+  const { isChild } = useAge();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -99,12 +101,17 @@ export function WhisperForm() {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Textarea
-                    placeholder="Share what's on your mind..."
-                    className="resize-none"
-                    rows={4}
-                    {...field}
-                  />
+                  <div className="relative">
+                     <Textarea
+                        placeholder="Share what's on your mind..."
+                        className="resize-none pr-10"
+                        rows={4}
+                        {...field}
+                      />
+                      <div className="absolute top-3 right-3">
+                         <Smile className="size-5 text-muted-foreground/50" />
+                      </div>
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -117,7 +124,7 @@ export function WhisperForm() {
                 Sharing...
               </>
             ) : (
-              'Share Anonymously'
+              isChild ? 'Share Secretly' : 'Share Anonymously'
             )}
           </Button>
         </form>
