@@ -8,6 +8,7 @@ import {
   Sparkles,
   Home,
   LogOut,
+  GitBranch,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -51,9 +52,10 @@ export function AppLayout({ children }: { children: ReactNode }) {
 
   const navItems = [
     { href: '/', label: 'Home', icon: Home },
-    { href: '/garden', label: isChild ? 'Garden' : 'Journal', icon: Sprout },
-    { href: '/whispers', label: 'Whispers', icon: MessageSquare },
     { href: '/sparks', label: isChild ? 'Sparkle Bot' : 'SparkAI', icon: Bot },
+    { href: '/whispers', label: 'Whispers', icon: MessageSquare },
+    { href: '/echoes', label: 'Echoes', icon: GitBranch },
+    { href: '/garden', label: isChild ? 'Garden' : 'Journal', icon: Sprout },
   ];
 
   return (
