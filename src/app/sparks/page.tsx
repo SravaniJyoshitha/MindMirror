@@ -29,6 +29,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
 import { useAge } from '../layout';
+import { EmojiBar } from '@/components/ui/emoji-bar';
 
 const soundMap: Record<string, string> = {
   '432Hz Healing Frequency':
@@ -38,7 +39,7 @@ const soundMap: Record<string, string> = {
   '528Hz Solfeggio Frequency':
     'https://open.spotify.com/embed/album/1oRucM5CL0c5j1s2tC1eI4',
   'Deep Sleep Delta Waves':
-    'https://open.spotify.com/embed/playlist/37i9dQZF1DX1YPTAhwehsC',
+    'https://open.spotify.com/embed/playlist/37i9dQZF1DWYcDQ1hSjOpY',
   'Theta Waves for Meditation':
     'https://open.spotify.com/embed/album/1qMOoiQ3Ul0H5tOLOUXR7d',
 };
@@ -81,6 +82,10 @@ export default function SparksPage() {
     } finally {
       setIsLoading(false);
     }
+  };
+  
+  const handleEmojiSelect = (emoji: string) => {
+    setCurrentSituation((prev) => prev + emoji);
   };
 
   const handleFormSubmit = (e: React.FormEvent) => {
@@ -131,6 +136,7 @@ export default function SparksPage() {
                          <Smile className="size-5 text-muted-foreground/50" />
                       </div>
                   </div>
+                  <EmojiBar onEmojiSelect={handleEmojiSelect} />
                   <Button size="lg" type="submit" className="w-full">
                     <MessageSquare className="mr-2" />
                     {isChild ? 'Get a Fun Idea!' : 'Generate Spark'}

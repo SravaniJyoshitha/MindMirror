@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/dialog';
 import { format } from 'date-fns';
 import { useAge } from '@/app/layout';
+import { EmojiBar } from './ui/emoji-bar';
 
 const formSchema = z.object({
   whisper: z
@@ -64,6 +65,10 @@ export function WhisperForm() {
       whisper: '',
     },
   });
+
+  const handleEmojiSelect = (emoji: string) => {
+    form.setValue('whisper', form.getValues('whisper') + emoji);
+  };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
@@ -117,6 +122,7 @@ export function WhisperForm() {
               </FormItem>
             )}
           />
+          <EmojiBar onEmojiSelect={handleEmojiSelect} />
           <Button type="submit" disabled={isSubmitting} className="w-full">
             {isSubmitting ? (
               <>
