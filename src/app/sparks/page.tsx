@@ -151,7 +151,7 @@ export default function SparksPage() {
                   <EmojiBar onEmojiSelect={handleEmojiSelect} />
                   <Button size="lg" type="submit" className="w-full">
                     <MessageSquare className="mr-2" />
-                    {isChild ? 'Get a Fun Idea!' : 'Generate Spark'}
+                    {isChild ? 'Help Me Sparkle!' : 'Generate Spark'}
                   </Button>
                 </form>
               </CardContent>
