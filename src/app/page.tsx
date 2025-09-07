@@ -29,7 +29,7 @@ export default function HomePage() {
                   <Bot className="w-8 h-8 text-primary" />
                 </div>
                 <div>
-                  <CardTitle className="text-2xl">{isChild ? 'Your Feelings Helper' : 'Your Therapist - SparkAI'}</CardTitle>
+                  <CardTitle className="text-2xl">{isChild ? 'Your Sparkle Bot' : 'Your Therapist - SparkAI'}</CardTitle>
                   <CardDescription>{isChild ? 'Get help with your feelings.' : 'Get personalized cognitive exercises.'}</CardDescription>
                 </div>
               </div>

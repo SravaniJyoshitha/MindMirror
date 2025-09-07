@@ -99,7 +99,7 @@ export default function SparksPage() {
   return (
     <div className="container mx-auto flex flex-col items-center justify-center space-y-8 text-center">
       <div>
-        <h1 className="text-3xl font-headline mb-2">{isChild ? 'Feelings Helper' : 'SparkAI Therapist'}</h1>
+        <h1 className="text-3xl font-headline mb-2">{isChild ? 'Sparkle Bot' : 'SparkAI Therapist'}</h1>
         <p className="text-muted-foreground max-w-2xl mx-auto">
           {isChild ? 'Tell me about a feeling, and I\'ll give you a fun activity to feel better.' : 'Describe a situation or a feeling, and get a tailored cognitive exercise to help you find a new perspective.'}
         </p>

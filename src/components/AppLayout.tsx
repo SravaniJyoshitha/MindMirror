@@ -53,7 +53,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
     { href: '/', label: 'Home', icon: Home },
     { href: '/garden', label: isChild ? 'Garden' : 'Journal', icon: Sprout },
     { href: '/whispers', label: 'Whispers', icon: MessageSquare },
-    { href: '/sparks', label: isChild ? 'Helper' : 'SparkAI', icon: Bot },
+    { href: '/sparks', label: isChild ? 'Sparkle Bot' : 'SparkAI', icon: Bot },
   ];
 
   return (
