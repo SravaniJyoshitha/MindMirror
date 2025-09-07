@@ -19,8 +19,9 @@ import {
   Video,
 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useEffect, useState } from 'react';
 
-const whispers = [
+const sampleWhispers = [
   "I'm feeling overwhelmed with work, but I'm afraid to tell anyone.",
   "Sometimes I feel incredibly lonely, even when I'm surrounded by people.",
   'I achieved a small goal today and I am secretly very proud of myself.',
@@ -77,6 +78,22 @@ const therapists = [
 
 export default function WhispersPage() {
   const { isChild } = useAge();
+  const [whispers, setWhispers] = useState<string[]>(sampleWhispers);
+
+  useEffect(() => {
+    try {
+      const storedReflections = localStorage.getItem('reflections');
+      if (storedReflections) {
+        const parsedReflections: { thought: string; date: string }[] = JSON.parse(storedReflections);
+        const userWhispers = parsedReflections.map(item => item.thought).reverse();
+        // Show user's whispers first, then the sample ones, avoiding duplicates.
+        setWhispers([...userWhispers, ...sampleWhispers.filter(sw => !userWhispers.includes(sw))]);
+      }
+    } catch (error) {
+      console.error('Failed to parse reflections from localStorage', error);
+      setWhispers(sampleWhispers);
+    }
+  }, []);
 
   return (
     <div className="container mx-auto space-y-8">
@@ -152,7 +169,7 @@ export default function WhispersPage() {
         <TabsContent value="friends" className="mt-4">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
              <div className="lg:col-span-2">
-              <Tabs defaultValue="friends">
+              <Tabs defaultValue="stream">
                 <TabsList className="grid w-full grid-cols-2">
                   <TabsTrigger value="friends">{isChild ? 'My Friends' : 'Friends List'}</TabsTrigger>
                   <TabsTrigger value="stream">
