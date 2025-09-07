@@ -37,9 +37,9 @@ export default function LoginPage() {
              <Sparkles className="size-8 text-primary" />
              <h1 className="text-3xl font-bold font-headline">MindMirror+</h1>
           </div>
-          <CardTitle className="text-2xl">Welcome Back</CardTitle>
+          <CardTitle className="text-2xl">Create Your Account</CardTitle>
           <CardDescription>
-            Sign in to continue your wellness journey.
+            Join to begin your personalized wellness journey.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -51,15 +51,25 @@ export default function LoginPage() {
             <Label htmlFor="password">Password</Label>
             <Input id="password" type="password" placeholder="••••••••" />
           </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="age">Age</Label>
+              <Input id="age" type="number" placeholder="25" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="location">Location</Label>
+              <Input id="location" type="text" placeholder="City, Country" />
+            </div>
+          </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
           <Button className="w-full" onClick={handleLogin}>
-            Sign In
+            Sign Up
           </Button>
            <p className="text-xs text-muted-foreground">
-            Don't have an account?{' '}
-            <a href="#" className="text-primary hover:underline">
-              Sign Up
+            Already have an account?{' '}
+            <a href="#" className="text-primary hover:underline" onClick={(e) => { e.preventDefault(); handleLogin(); }}>
+              Sign In
             </a>
           </p>
         </CardFooter>
