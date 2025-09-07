@@ -12,6 +12,7 @@ import { useAge } from '../layout';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
+  Info,
   MessageSquarePlus,
   UserPlus,
   Users,
@@ -151,26 +152,13 @@ export default function WhispersPage() {
         <TabsContent value="friends" className="mt-4">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
              <div className="lg:col-span-2">
-              <Tabs defaultValue="stream">
+              <Tabs defaultValue="friends">
                 <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="friends">{isChild ? 'My Friends' : 'Friends List'}</TabsTrigger>
                   <TabsTrigger value="stream">
                     {isChild ? 'Feelings from Others' : 'Community Stream'}
                   </TabsTrigger>
-                  <TabsTrigger value="friends">{isChild ? 'My Friends' : 'Friends List'}</TabsTrigger>
                 </TabsList>
-                <TabsContent value="stream" className="mt-4">
-                  <div className="space-y-4">
-                    {whispers.map((whisper, index) => (
-                      <Card key={index} className="bg-card/80">
-                        <CardContent className="p-4">
-                          <p className="italic text-card-foreground">
-                            “{whisper}”
-                          </p>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                </TabsContent>
                 <TabsContent value="friends" className="mt-4">
                    <Card>
                     <CardHeader>
@@ -202,6 +190,31 @@ export default function WhispersPage() {
                       ))}
                     </CardContent>
                   </Card>
+                </TabsContent>
+                <TabsContent value="stream" className="mt-4">
+                  <div className="space-y-4">
+                    <Card className="bg-primary/10 border-primary/20">
+                      <CardContent className="p-4">
+                        <div className="flex items-start gap-3">
+                           <Info className="size-5 text-primary shrink-0 mt-0.5" />
+                          <div>
+                            <p className="font-semibold text-primary">You are not alone.</p>
+                            <p className="text-sm text-primary/80">This is an anonymous stream of thoughts from other users. It's a reminder that many people share similar feelings, and you're part of a community that understands.</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {whispers.map((whisper, index) => (
+                      <Card key={index} className="bg-card/80">
+                        <CardContent className="p-4">
+                          <p className="italic text-card-foreground">
+                            “{whisper}”
+                          </p>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
                 </TabsContent>
               </Tabs>
             </div>
