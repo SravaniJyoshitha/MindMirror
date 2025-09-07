@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -20,11 +20,15 @@ import {
   MessageSquare,
   Music,
   Smile,
+  Volume2,
+  Play,
+  Pause,
 } from 'lucide-react';
 import {
   getCognitiveSpark,
   type CognitiveSparkOutput,
 } from '@/ai/flows/get-cognitive-spark';
+import { textToSpeech } from '@/ai/flows/text-to-speech';
 import { useToast } from '@/hooks/use-toast';
 import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
@@ -60,6 +64,10 @@ export default function SparksPage() {
   const [spark, setSpark] = useState<CognitiveSparkOutput | null>(null);
   const [currentSituation, setCurrentSituation] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [isAudioLoading, setIsAudioLoading] = useState(false);
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
   const { toast } = useToast();
   const { isChild } = useAge();
 
@@ -67,18 +75,79 @@ export default function SparksPage() {
     ? soundMap[spark.musicSuggestion.title]
     : undefined;
 
+  useEffect(() => {
+    if (spark && !audioUrl && !isAudioLoading) {
+      const generateAudio = async () => {
+        setIsAudioLoading(true);
+        try {
+          const textToRead = [
+            spark.reassurance,
+            `${isChild ? 'Activity Time!' : 'Cognitive Exercise'}: ${spark.title}`,
+            spark.exercise,
+            isChild ? 'Things to Remember' : 'Key Realizations',
+            ...spark.realizations,
+            `${isChild ? 'A Quick Tip' : 'Instant Coping Strategy'}: ${
+              spark.instantCopingStrategy.title
+            }`,
+            spark.instantCopingStrategy.description,
+          ].join('. ');
+
+          const { audio } = await textToSpeech(textToRead);
+          setAudioUrl(audio);
+        } catch (error) {
+          console.error('Error generating audio:', error);
+          toast({
+            variant: 'destructive',
+            title: 'Could not generate audio guide.',
+            description: 'Please try again later.',
+          });
+        } finally {
+          setIsAudioLoading(false);
+        }
+      };
+      generateAudio();
+    }
+  }, [spark, audioUrl, isAudioLoading, isChild, toast]);
+
+  useEffect(() => {
+    const audioEl = audioRef.current;
+    if (audioEl) {
+      audioEl.addEventListener('ended', () => setIsAudioPlaying(false));
+      return () => {
+        audioEl.removeEventListener('ended', () => setIsAudioPlaying(false));
+      };
+    }
+  }, [audioUrl]);
+
+  const handleAudioPlayPause = () => {
+    const audioEl = audioRef.current;
+    if (!audioEl) return;
+    if (isAudioPlaying) {
+      audioEl.pause();
+    } else {
+      audioEl.play();
+    }
+    setIsAudioPlaying(!isAudioPlaying);
+  };
+
   const handleGenerateSpark = async (situation: string) => {
     if (!situation.trim()) {
       toast({
         variant: 'destructive',
         title: isChild ? 'Whoops!' : 'Please describe your situation.',
-        description: isChild ? 'I need to know how you\'re feeling to help!' : "We need to know what you're going through to help.",
+        description: isChild
+          ? "I need to know how you're feeling to help!"
+          : "We need to know what you're going through to help.",
       });
       return;
     }
 
     setIsLoading(true);
     setSpark(null);
+    setAudioUrl(null);
+    setIsAudioLoading(false);
+    setIsAudioPlaying(false);
+
 
     try {
       const newSpark = await getCognitiveSpark({ situation });
@@ -95,7 +164,7 @@ export default function SparksPage() {
       setIsLoading(false);
     }
   };
-  
+
   const handleEmojiSelect = (emoji: string) => {
     setCurrentSituation((prev) => prev + emoji);
   };
@@ -108,6 +177,12 @@ export default function SparksPage() {
   const handleNewSpark = () => {
     setSpark(null);
     setCurrentSituation('');
+    setAudioUrl(null);
+    if (audioRef.current) {
+       audioRef.current.pause();
+       audioRef.current.currentTime = 0;
+    }
+    setIsAudioPlaying(false);
   };
 
   const showInputArea = !spark && !isLoading;
@@ -117,9 +192,13 @@ export default function SparksPage() {
   return (
     <div className="container mx-auto flex flex-col items-center justify-center space-y-8 text-center">
       <div>
-        <h1 className="text-3xl font-headline mb-2">{isChild ? 'Sparkle Bot' : 'SparkAI Therapist'}</h1>
+        <h1 className="text-3xl font-headline mb-2">
+          {isChild ? 'Sparkle Bot' : 'SparkAI Therapist'}
+        </h1>
         <p className="text-muted-foreground max-w-2xl mx-auto">
-          {isChild ? 'Tell me about a feeling, and I\'ll give you a fun activity to feel better.' : 'Describe a situation or a feeling, and get a tailored cognitive exercise to help you find a new perspective.'}
+          {isChild
+            ? "Tell me about a feeling, and I'll give you a fun activity to feel better."
+            : 'Describe a situation or a feeling, and get a tailored cognitive exercise to help you find a new perspective.'}
         </p>
       </div>
 
@@ -128,9 +207,13 @@ export default function SparksPage() {
           {showInputArea && (
             <>
               <CardHeader>
-                <CardTitle>{isChild ? 'How are you feeling?' : 'What\'s on your mind?'}</CardTitle>
+                <CardTitle>
+                  {isChild ? 'How are you feeling?' : "What's on your mind?"}
+                </CardTitle>
                 <CardDescription>
-                  {isChild ? 'You can tell me anything. I\'m here to listen.' : 'Briefly describe the situation you\'re facing.'}
+                  {isChild
+                    ? "You can tell me anything. I'm here to listen."
+                    : "Briefly describe the situation you're facing."}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -138,15 +221,19 @@ export default function SparksPage() {
                   <div className="relative">
                     <Textarea
                       id="situation"
-                      placeholder={isChild ? "e.g., I'm feeling sad because my friend was mean..." : "e.g., I'm feeling anxious about a big presentation..."}
+                      placeholder={
+                        isChild
+                          ? "e.g., I'm feeling sad because my friend was mean..."
+                          : "e.g., I'm feeling anxious about a big presentation..."
+                      }
                       value={currentSituation}
                       onChange={(e) => setCurrentSituation(e.target.value)}
                       rows={4}
                       className="resize-none pr-10"
                     />
-                     <div className="absolute top-3 right-3">
-                         <Smile className="size-5 text-muted-foreground/50" />
-                      </div>
+                    <div className="absolute top-3 right-3">
+                      <Smile className="size-5 text-muted-foreground/50" />
+                    </div>
                   </div>
                   <EmojiBar onEmojiSelect={handleEmojiSelect} />
                   <Button size="lg" type="submit" className="w-full">
@@ -163,7 +250,9 @@ export default function SparksPage() {
               <div className="flex flex-col items-center justify-center min-h-[10rem] p-8">
                 <Loader2 className="w-16 h-16 text-primary animate-spin" />
                 <p className="mt-4 text-muted-foreground">
-                  {isChild ? 'Thinking of a fun idea for you...' : 'Generating your cognitive spark...'}
+                  {isChild
+                    ? 'Thinking of a fun idea for you...'
+                    : 'Generating your cognitive spark...'}
                 </p>
               </div>
             </CardContent>
@@ -172,16 +261,33 @@ export default function SparksPage() {
           {showResults && spark && (
             <>
               <CardContent className="p-6 space-y-6 text-left animate-in fade-in duration-500">
-                <div className="p-4 bg-primary/10 rounded-lg">
-                  <p className="font-semibold text-primary text-center">
+                <div className="flex justify-between items-center p-4 bg-primary/10 rounded-lg">
+                  <p className="font-semibold text-primary text-center flex-1">
                     {spark.reassurance}
                   </p>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={handleAudioPlayPause}
+                    disabled={!audioUrl || isAudioLoading}
+                    className="text-primary disabled:opacity-50"
+                  >
+                    {isAudioLoading ? (
+                      <Loader2 className="animate-spin" />
+                    ) : isAudioPlaying ? (
+                      <Pause />
+                    ) : (
+                      <Play />
+                    )}
+                    <span className="sr-only">Play Audio Guide</span>
+                  </Button>
                 </div>
 
                 <div className="border border-border rounded-lg p-4">
                   <CardTitle className="flex items-center gap-2 mb-2">
                     <Zap className="text-primary" />
-                    {isChild ? 'Activity Time!' : 'Cognitive Exercise'}: {spark.title}
+                    {isChild ? 'Activity Time!' : 'Cognitive Exercise'}:{' '}
+                    {spark.title}
                   </CardTitle>
                   <p className="whitespace-pre-wrap text-muted-foreground">
                     {spark.exercise}
@@ -192,7 +298,9 @@ export default function SparksPage() {
                   <Card className="p-4 bg-secondary">
                     <h3 className="font-semibold text-lg mb-2 flex items-center gap-2">
                       <Music className="text-secondary-foreground/80" />
-                      {isChild ? 'Happy Sounds' : 'Audio Spark for Instant Relief'}
+                      {isChild
+                        ? 'Happy Sounds'
+                        : 'Audio Spark for Instant Relief'}
                     </h3>
                     <p className="font-bold text-secondary-foreground">
                       {spark.musicSuggestion.title}
@@ -201,9 +309,19 @@ export default function SparksPage() {
                       {spark.musicSuggestion.description}
                     </p>
                     <div className="flex items-center gap-4">
-                      <span className="text-sm font-medium text-secondary-foreground">Listen on:</span>
-                      <Link href={audioSrc} target="_blank" rel="noopener noreferrer">
-                        <Button variant="outline" size="icon" className="bg-background hover:bg-accent">
+                      <span className="text-sm font-medium text-secondary-foreground">
+                        Listen on:
+                      </span>
+                      <Link
+                        href={audioSrc}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="bg-background hover:bg-accent"
+                        >
                           <SpotifyIcon className="w-5 h-5" />
                           <span className="sr-only">Spotify</span>
                         </Button>
@@ -252,6 +370,7 @@ export default function SparksPage() {
             </>
           )}
         </Card>
+        {audioUrl && <audio ref={audioRef} src={audioUrl} />}
       </div>
     </div>
   );
