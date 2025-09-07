@@ -117,17 +117,27 @@ export default function SparksPage() {
         audioEl.removeEventListener('ended', handleEnded);
       };
     }
-  }, [audioUrl]);
+  }, [audioRef.current]); // Important: Re-run when the ref is attached
 
   const handleAudioPlayPause = () => {
     const audioEl = audioRef.current;
     if (!audioEl) return;
     if (isAudioPlaying) {
       audioEl.pause();
+      setIsAudioPlaying(false);
     } else {
-      audioEl.play();
+      audioEl.play().then(() => {
+        setIsAudioPlaying(true);
+      }).catch(error => {
+        console.error("Audio play failed:", error);
+        toast({
+          variant: 'destructive',
+          title: 'Could not play audio.',
+          description: 'Your browser may have blocked auto-play. Please try again.',
+        });
+        setIsAudioPlaying(false);
+      });
     }
-    setIsAudioPlaying(!isAudioPlaying);
   };
 
   const handleGenerateSpark = async (situation: string) => {
@@ -376,4 +386,3 @@ export default function SparksPage() {
   );
 }
 
-    
