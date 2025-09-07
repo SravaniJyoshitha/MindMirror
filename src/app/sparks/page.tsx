@@ -75,7 +75,7 @@ export default function SparksPage() {
     : undefined;
 
   useEffect(() => {
-    if (spark && !audioUrl && !isAudioLoading) {
+    if (spark && !audioUrl) {
       const generateAudio = async () => {
         setIsAudioLoading(true);
         try {
@@ -98,7 +98,7 @@ export default function SparksPage() {
           toast({
             variant: 'destructive',
             title: 'Could not generate audio guide.',
-            description: 'Please try again later.',
+            description: 'The text-to-speech service may be unavailable. Please try again later.',
           });
         } finally {
           setIsAudioLoading(false);
@@ -106,7 +106,7 @@ export default function SparksPage() {
       };
       generateAudio();
     }
-  }, [spark, audioUrl, isAudioLoading, isChild, toast]);
+  }, [spark, audioUrl, isChild, toast]);
 
   useEffect(() => {
     const audioEl = audioRef.current;
@@ -269,7 +269,7 @@ export default function SparksPage() {
                     variant="ghost"
                     size="icon"
                     onClick={handleAudioPlayPause}
-                    disabled={!audioUrl || isAudioLoading}
+                    disabled={isAudioLoading || !audioUrl}
                     className="text-primary disabled:opacity-50"
                   >
                     {isAudioLoading ? (
@@ -375,3 +375,5 @@ export default function SparksPage() {
     </div>
   );
 }
+
+    
