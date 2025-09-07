@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -20,14 +20,11 @@ import {
   MessageSquare,
   Music,
   Smile,
-  Play,
-  Pause,
 } from 'lucide-react';
 import {
   getCognitiveSpark,
   type CognitiveSparkOutput,
 } from '@/ai/flows/get-cognitive-spark';
-import { textToSpeech } from '@/ai/flows/text-to-speech';
 import { useToast } from '@/hooks/use-toast';
 import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
@@ -63,82 +60,12 @@ export default function SparksPage() {
   const [spark, setSpark] = useState<CognitiveSparkOutput | null>(null);
   const [currentSituation, setCurrentSituation] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [audioUrl, setAudioUrl] = useState<string | null>(null);
-  const [isAudioLoading, setIsAudioLoading] = useState(false);
-  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
-  const audioRef = useRef<HTMLAudioElement>(null);
   const { toast } = useToast();
   const { isChild } = useAge();
 
   const audioSrc = spark?.musicSuggestion?.title
     ? soundMap[spark.musicSuggestion.title]
     : undefined;
-
-  useEffect(() => {
-    if (spark && !audioUrl) {
-      const generateAudio = async () => {
-        setIsAudioLoading(true);
-        try {
-          const textToRead = [
-            spark.reassurance,
-            `${isChild ? 'Activity Time!' : 'Cognitive Exercise'}: ${spark.title}`,
-            spark.exercise,
-            isChild ? 'Things to Remember' : 'Key Realizations',
-            ...spark.realizations,
-            `${isChild ? 'A Quick Tip' : 'Instant Coping Strategy'}: ${
-              spark.instantCopingStrategy.title
-            }`,
-            spark.instantCopingStrategy.description,
-          ].join('. ');
-
-          const { audio } = await textToSpeech(textToRead);
-          setAudioUrl(audio);
-        } catch (error) {
-          console.error('Error generating audio:', error);
-          toast({
-            variant: 'destructive',
-            title: 'Could not generate audio guide.',
-            description: 'The text-to-speech service may be unavailable. Please try again later.',
-          });
-        } finally {
-          setIsAudioLoading(false);
-        }
-      };
-      generateAudio();
-    }
-  }, [spark, audioUrl, isChild, toast]);
-
-  useEffect(() => {
-    const audioEl = audioRef.current;
-    if (audioEl) {
-      const handleEnded = () => setIsAudioPlaying(false);
-      audioEl.addEventListener('ended', handleEnded);
-      return () => {
-        audioEl.removeEventListener('ended', handleEnded);
-      };
-    }
-  }, [audioRef.current]); // Important: Re-run when the ref is attached
-
-  const handleAudioPlayPause = () => {
-    const audioEl = audioRef.current;
-    if (!audioEl) return;
-    if (isAudioPlaying) {
-      audioEl.pause();
-      setIsAudioPlaying(false);
-    } else {
-      audioEl.play().then(() => {
-        setIsAudioPlaying(true);
-      }).catch(error => {
-        console.error("Audio play failed:", error);
-        toast({
-          variant: 'destructive',
-          title: 'Could not play audio.',
-          description: 'Your browser may have blocked auto-play. Please try again.',
-        });
-        setIsAudioPlaying(false);
-      });
-    }
-  };
 
   const handleGenerateSpark = async (situation: string) => {
     if (!situation.trim()) {
@@ -154,10 +81,6 @@ export default function SparksPage() {
 
     setIsLoading(true);
     setSpark(null);
-    setAudioUrl(null);
-    setIsAudioLoading(false);
-    setIsAudioPlaying(false);
-
 
     try {
       const newSpark = await getCognitiveSpark({ situation });
@@ -187,12 +110,6 @@ export default function SparksPage() {
   const handleNewSpark = () => {
     setSpark(null);
     setCurrentSituation('');
-    setAudioUrl(null);
-    if (audioRef.current) {
-       audioRef.current.pause();
-       audioRef.current.currentTime = 0;
-    }
-    setIsAudioPlaying(false);
   };
 
   const showInputArea = !spark && !isLoading;
@@ -275,22 +192,6 @@ export default function SparksPage() {
                   <p className="font-semibold text-primary text-center flex-1">
                     {spark.reassurance}
                   </p>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={handleAudioPlayPause}
-                    disabled={isAudioLoading || !audioUrl}
-                    className="text-primary disabled:opacity-50"
-                  >
-                    {isAudioLoading ? (
-                      <Loader2 className="animate-spin" />
-                    ) : isAudioPlaying ? (
-                      <Pause />
-                    ) : (
-                      <Play />
-                    )}
-                    <span className="sr-only">Play Audio Guide</span>
-                  </Button>
                 </div>
 
                 <div className="border border-border rounded-lg p-4">
@@ -380,9 +281,7 @@ export default function SparksPage() {
             </>
           )}
         </Card>
-        {audioUrl && <audio ref={audioRef} src={audioUrl} />}
       </div>
     </div>
   );
 }
-
