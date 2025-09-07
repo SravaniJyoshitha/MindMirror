@@ -19,6 +19,7 @@ import {
   CheckCircle,
   MessageSquare,
   Music,
+  Smile,
 } from 'lucide-react';
 import {
   getCognitiveSpark,
@@ -37,7 +38,7 @@ const soundMap: Record<string, string> = {
   '528Hz Solfeggio Frequency':
     'https://open.spotify.com/embed/album/1oRucM5CL0c5j1s2tC1eI4',
   'Deep Sleep Delta Waves':
-    'https://open.spotify.com/embed/playlist/37i9dQZF1DWYc3C4s8yI3k',
+    'https://open.spotify.com/embed/playlist/37i9dQZF1DX1YPTAhwehsC',
   'Theta Waves for Meditation':
     'https://open.spotify.com/embed/album/1qMOoiQ3Ul0H5tOLOUXR7d',
 };
@@ -117,14 +118,19 @@ export default function SparksPage() {
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleFormSubmit} className="grid w-full gap-2">
-                  <Textarea
-                    id="situation"
-                    placeholder={isChild ? "e.g., I'm feeling sad because my friend was mean..." : "e.g., I'm feeling anxious about a big presentation..."}
-                    value={currentSituation}
-                    onChange={(e) => setCurrentSituation(e.target.value)}
-                    rows={4}
-                    className="resize-none"
-                  />
+                  <div className="relative">
+                    <Textarea
+                      id="situation"
+                      placeholder={isChild ? "e.g., I'm feeling sad because my friend was mean..." : "e.g., I'm feeling anxious about a big presentation..."}
+                      value={currentSituation}
+                      onChange={(e) => setCurrentSituation(e.target.value)}
+                      rows={4}
+                      className="resize-none pr-10"
+                    />
+                     <div className="absolute top-3 right-3">
+                         <Smile className="size-5 text-muted-foreground/50" />
+                      </div>
+                  </div>
                   <Button size="lg" type="submit" className="w-full">
                     <MessageSquare className="mr-2" />
                     {isChild ? 'Get a Fun Idea!' : 'Generate Spark'}
