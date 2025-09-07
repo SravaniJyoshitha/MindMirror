@@ -1,13 +1,21 @@
 'use client';
 
-import { Sprout, MessageSquare, Bot, Sparkles, Home } from 'lucide-react';
+import {
+  Sprout,
+  MessageSquare,
+  Bot,
+  Sparkles,
+  Home,
+  LogOut,
+} from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import type { ReactNode } from 'react';
 
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
@@ -17,6 +25,7 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 import { Toaster } from '@/components/ui/toaster';
+import { Button } from './ui/button';
 
 const navItems = [
   { href: '/', label: 'Home', icon: Home },
@@ -25,8 +34,22 @@ const navItems = [
   { href: '/sparks', label: 'SparkAI', icon: Bot },
 ];
 
+const AUTH_KEY = 'mindmirror-auth';
+
 export function AppLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    try {
+      localStorage.removeItem(AUTH_KEY);
+      router.push('/login');
+    } catch (error) {
+      console.error('Could not log out', error);
+      // still try to redirect
+      router.push('/login');
+    }
+  };
 
   return (
     <SidebarProvider>
@@ -58,6 +81,20 @@ export function AppLayout({ children }: { children: ReactNode }) {
             ))}
           </SidebarMenu>
         </SidebarContent>
+        <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                onClick={handleLogout}
+                tooltip="Logout"
+                className="justify-center md:justify-start"
+              >
+                <LogOut />
+                <span>Logout</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
       </Sidebar>
       <SidebarInset>
         <header className="sticky top-0 z-10 flex h-14 items-center justify-between border-b bg-background/80 px-4 backdrop-blur-sm md:hidden">
