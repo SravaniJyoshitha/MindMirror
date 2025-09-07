@@ -63,7 +63,7 @@ const therapists = [
   },
   {
     name: 'Dr. Marcus Thorne',
-    avatar: 'https://i.pravatar.cc/150?img=2',
+    avatar: 'https://i.pravatar.cc/150?img=4',
     specialty: 'Depression & Relationship Issues',
     bio: 'Dr. Thorne offers a compassionate, person-centered approach to help you navigate life\'s challenges and build stronger connections.',
   },
