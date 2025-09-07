@@ -20,7 +20,6 @@ import {
   MessageSquare,
   Music,
   Smile,
-  Volume2,
   Play,
   Pause,
 } from 'lucide-react';
@@ -112,9 +111,10 @@ export default function SparksPage() {
   useEffect(() => {
     const audioEl = audioRef.current;
     if (audioEl) {
-      audioEl.addEventListener('ended', () => setIsAudioPlaying(false));
+      const handleEnded = () => setIsAudioPlaying(false);
+      audioEl.addEventListener('ended', handleEnded);
       return () => {
-        audioEl.removeEventListener('ended', () => setIsAudioPlaying(false));
+        audioEl.removeEventListener('ended', handleEnded);
       };
     }
   }, [audioUrl]);
