@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { WhisperForm } from '@/components/WhisperForm';
 import { useAge } from '../layout';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -16,6 +15,7 @@ import {
   MessageSquarePlus,
   UserPlus,
   Users,
+  Video,
 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -53,6 +53,27 @@ const friends = [
   },
 ];
 
+const therapists = [
+  {
+    name: 'Dr. Evelyn Reed',
+    avatar: 'https://i.pravatar.cc/150?img=1',
+    specialty: 'Anxiety & Stress Management',
+    bio: 'With over 10 years of experience, Dr. Reed specializes in cognitive-behavioral therapy (CBT) to help you develop coping strategies.',
+  },
+  {
+    name: 'Dr. Marcus Thorne',
+    avatar: 'https://i.pravatar.cc/150?img=2',
+    specialty: 'Depression & Relationship Issues',
+    bio: 'Dr. Thorne offers a compassionate, person-centered approach to help you navigate life\'s challenges and build stronger connections.',
+  },
+    {
+    name: 'Dr. Lena Petrova',
+    avatar: 'https://i.pravatar.cc/150?img=3',
+    specialty: 'Trauma & PTSD',
+    bio: 'Dr. Petrova uses evidence-based techniques like EMDR to help clients process trauma in a safe and supportive environment.',
+  },
+];
+
 export default function WhispersPage() {
   const { isChild } = useAge();
 
@@ -61,12 +82,12 @@ export default function WhispersPage() {
       <div className="flex justify-between items-start">
         <div>
           <h1 className="text-3xl font-headline mb-2">
-            {isChild ? 'Share a Feeling' : 'Anonymous Thought Stream'}
+            {isChild ? 'Find a Helper' : 'Connect with a Therapist'}
           </h1>
           <p className="text-muted-foreground">
             {isChild
-              ? "Share a secret feeling. No one will know it's you!"
-              : 'A place to share your thoughts and feelings without judgment. You are not alone.'}
+              ? "Talk to a grown-up who can help with your feelings."
+              : 'Find professional therapists available for a session.'}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -83,19 +104,43 @@ export default function WhispersPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1">
-          <Card className="sticky top-24 shadow-lg">
+           <Card className="sticky top-24 shadow-lg">
             <CardHeader>
               <CardTitle>
-                {isChild ? 'What Are You Feeling?' : 'Share a Thought'}
+                {isChild ? 'Available Helpers' : 'Available Therapists'}
               </CardTitle>
               <CardDescription>
                 {isChild
-                  ? "It's okay to share what you're feeling. Our friendly helper will write back to you."
-                  : 'Your thoughts are safe here. Share anonymously and receive a supportive reflection from our AI companion.'}
+                  ? "Here are some friendly people you can talk to."
+                  : 'Browse profiles and find the right therapist for you.'}
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <WhisperForm />
+            <CardContent className="space-y-4">
+              {therapists.map((therapist) => (
+                 <Card key={therapist.name} className="p-4 hover:bg-accent/50 transition-colors">
+                  <div className="flex items-start gap-4">
+                     <Avatar className="h-16 w-16 border">
+                       <AvatarImage src={therapist.avatar} alt={therapist.name} />
+                       <AvatarFallback>{therapist.name.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1">
+                       <p className="font-bold">{therapist.name}</p>
+                       <p className="text-xs font-medium text-primary">{therapist.specialty}</p>
+                       <p className="text-sm text-muted-foreground mt-2">{therapist.bio}</p>
+                       <div className="flex gap-2 mt-3">
+                         <Button size="sm" variant="secondary">
+                           <MessageSquarePlus className="mr-2" />
+                           {isChild ? 'Chat' : 'Message'}
+                         </Button>
+                         <Button size="sm">
+                           <Video className="mr-2" />
+                           {isChild ? 'Call' : 'Book Session'}
+                         </Button>
+                       </div>
+                    </div>
+                  </div>
+                 </Card>
+              ))}
             </CardContent>
           </Card>
         </div>
