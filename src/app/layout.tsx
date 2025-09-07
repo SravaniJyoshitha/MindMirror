@@ -47,8 +47,6 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (!isAuthenticated && pathname !== '/login') {
         router.push('/login');
-      } else if (isAuthenticated && pathname === '/login') {
-        router.push('/');
       } else {
         setIsChecking(false);
       }
