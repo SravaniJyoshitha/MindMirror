@@ -44,6 +44,29 @@ export default function HomePage() {
             </div>
           </Card>
         </Link>
+        <Link href="/whispers" className="flex">
+          <Card className="w-full text-left transform transition-transform duration-300 hover:scale-105 hover:shadow-xl flex flex-col">
+            <CardHeader>
+              <div className="flex items-center gap-4">
+                 <div className="bg-primary/10 p-3 rounded-full">
+                  <MessageSquare className="w-8 h-8 text-primary" />
+                </div>
+                <div>
+                    <CardTitle className="text-2xl">Whispers</CardTitle>
+                    <CardDescription>{isChild ? 'Talk to helpers or friends.' : 'Community & support.'}</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="flex-grow">
+              <p>
+                {isChild ? 'Find friendly grown-ups to talk to, or connect with your friends in a safe space.' : 'Find professional support from licensed therapists or connect with a community of peers who understand.'}
+              </p>
+            </CardContent>
+             <div className="p-6 pt-0">
+               <Button className="w-full">{isChild ? 'Find Support' : 'Get Connected'}</Button>
+            </div>
+          </Card>
+        </Link>
         <Link href="/garden" className="flex">
           <Card className="w-full text-left transform transition-transform duration-300 hover:scale-105 hover:shadow-xl flex flex-col">
             <CardHeader>
@@ -64,29 +87,6 @@ export default function HomePage() {
             </CardContent>
              <div className="p-6 pt-0">
                <Button className="w-full">{isChild ? 'See My Garden' : 'View Journal'}</Button>
-            </div>
-          </Card>
-        </Link>
-        <Link href="/whispers" className="flex">
-          <Card className="w-full text-left transform transition-transform duration-300 hover:scale-105 hover:shadow-xl flex flex-col">
-            <CardHeader>
-              <div className="flex items-center gap-4">
-                 <div className="bg-primary/10 p-3 rounded-full">
-                  <MessageSquare className="w-8 h-8 text-primary" />
-                </div>
-                <div>
-                    <CardTitle className="text-2xl">{isChild ? 'Helpers & Friends' : 'Community & Support'}</CardTitle>
-                    <CardDescription>{isChild ? 'Talk to helpers or friends.' : 'Connect with therapists or peers.'}</CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="flex-grow">
-              <p>
-                {isChild ? 'Find friendly grown-ups to talk to, or connect with your friends in a safe space.' : 'Find professional support from licensed therapists or connect with a community of peers who understand.'}
-              </p>
-            </CardContent>
-             <div className="p-6 pt-0">
-               <Button className="w-full">{isChild ? 'Find Support' : 'Get Connected'}</Button>
             </div>
           </Card>
         </Link>
