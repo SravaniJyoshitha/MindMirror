@@ -30,19 +30,31 @@ import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
 import { useAge } from '../layout';
 import { EmojiBar } from '@/components/ui/emoji-bar';
+import Link from 'next/link';
 
 const soundMap: Record<string, string> = {
   '432Hz Healing Frequency':
-    'https://open.spotify.com/embed/playlist/37i9dQZF1DX2v5qUXRSK2p',
+    'https://open.spotify.com/playlist/37i9dQZF1DX2v5qUXRSK2p',
   'Binaural Beats for Focus':
-    'https://open.spotify.com/embed/playlist/37i9dQZF1DWZel4j3y8f3g',
+    'https://open.spotify.com/playlist/37i9dQZF1DWZel4j3y8f3g',
   '528Hz Solfeggio Frequency':
-    'https://open.spotify.com/embed/album/1oRucM5CL0c5j1s2tC1eI4',
+    'https://open.spotify.com/album/1oRucM5CL0c5j1s2tC1eI4',
   'Deep Sleep Delta Waves':
-    'https://open.spotify.com/embed/playlist/37i9dQZF1DWYcDQ1hSjOpY',
+    'https://open.spotify.com/playlist/37i9dQZF1DWYcDQ1hSjOpY',
   'Theta Waves for Meditation':
-    'https://open.spotify.com/embed/album/1qMOoiQ3Ul0H5tOLOUXR7d',
+    'https://open.spotify.com/album/1qMOoiQ3Ul0H5tOLOUXR7d',
 };
+
+const SpotifyIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 496 512"
+    fill="currentColor"
+    {...props}
+  >
+    <path d="M248 8C111.1 8 0 119.1 0 256s111.1 248 248 248 248-111.1 248-248S384.9 8 248 8zm100.7 364.9c-4.1 2.9-8.9 2.3-12.3-1.6-32.3-22.3-71.3-36.4-114.2-36.4-40.4 0-77.2 13.1-107.5 34.5-3.8 2.6-8.7 2.2-12-1.2-3.3-3.4-3.7-8.4-1.1-12.2 35.3-51.1 94.1-81.5 159.7-81.5 69.9 0 132.2 33.1 176.9 88.5 2.7 3.4 2.3 8.3-1.2 11.6zM248 152c-65.7 0-120.5 45.4-120.5 101.5 0 23.4 9.9 45.1 26.5 61.8-3.9 2.5-8.1 3.9-12.5 3.9-6.3 0-12.4-1.6-17.9-4.5-3.1-1.7-6.8-1.5-9.6 0.5-2.8 2-4.2 5.2-3.7 8.5 6.6 43.5 45.3 76.7 91.1 76.7 47.7 0 87-35.3 92-81.4 0.5-3.6-1.1-7.1-4.1-9-2.9-1.9-6.6-1.7-9.4 0.4-5.6 2.9-11.8 4.5-18.2 4.5-4.6 0-9-1.5-13-4.2 16.9-16.7 27-38.6 27-62.2 0-56.1-54.8-101.5-120.5-101.5zm62.4 163.4c-3.2 2.1-7.1 1.9-9.9-0.4-25.1-19.9-57.9-31.4-93-31.4-32.9 0-63.4 10.6-88.2 28.5-2.9 2.1-6.7 1.9-9.5-0.5-2.7-2.4-3.6-6.1-2-9.2 31.2-57.7 87.9-92.2 150.3-92.2 60.1 0 114.2 32.2 150.8 82.5 2.2 3 1.9 7-0.7 9.5-2.5 2.5-6.3 2.9-9.4 0.8z" />
+  </svg>
+);
 
 export default function SparksPage() {
   const [spark, setSpark] = useState<CognitiveSparkOutput | null>(null);
@@ -188,14 +200,15 @@ export default function SparksPage() {
                     <p className="text-sm text-secondary-foreground mb-4">
                       {spark.musicSuggestion.description}
                     </p>
-                    <iframe
-                      key={audioSrc}
-                      src={audioSrc}
-                      width="100%"
-                      height="152"
-                      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                      loading="lazy"
-                    ></iframe>
+                    <div className="flex items-center gap-4">
+                      <span className="text-sm font-medium text-secondary-foreground">Listen on:</span>
+                      <Link href={audioSrc} target="_blank" rel="noopener noreferrer">
+                        <Button variant="outline" size="icon" className="bg-background hover:bg-accent">
+                          <SpotifyIcon className="w-5 h-5" />
+                          <span className="sr-only">Spotify</span>
+                        </Button>
+                      </Link>
+                    </div>
                   </Card>
                 )}
 
