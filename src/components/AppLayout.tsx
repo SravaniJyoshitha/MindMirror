@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -26,23 +27,20 @@ import {
 } from '@/components/ui/sidebar';
 import { Toaster } from '@/components/ui/toaster';
 import { Button } from './ui/button';
-
-const navItems = [
-  { href: '/', label: 'Home', icon: Home },
-  { href: '/garden', label: 'Journal', icon: Sprout },
-  { href: '/whispers', label: 'Whispers', icon: MessageSquare },
-  { href: '/sparks', label: 'SparkAI', icon: Bot },
-];
+import { useAge } from '@/app/layout';
 
 const AUTH_KEY = 'mindmirror-auth';
+const USER_AGE_KEY = 'mindmirror-user-age';
 
 export function AppLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
+  const { isChild } = useAge();
 
   const handleLogout = () => {
     try {
       localStorage.removeItem(AUTH_KEY);
+      localStorage.removeItem(USER_AGE_KEY);
       router.push('/login');
     } catch (error) {
       console.error('Could not log out', error);
@@ -50,6 +48,13 @@ export function AppLayout({ children }: { children: ReactNode }) {
       router.push('/login');
     }
   };
+
+  const navItems = [
+    { href: '/', label: 'Home', icon: Home },
+    { href: '/garden', label: isChild ? 'Garden' : 'Journal', icon: Sprout },
+    { href: '/whispers', label: 'Whispers', icon: MessageSquare },
+    { href: '/sparks', label: isChild ? 'Helper' : 'SparkAI', icon: Bot },
+  ];
 
   return (
     <SidebarProvider>

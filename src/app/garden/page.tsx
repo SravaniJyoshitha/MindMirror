@@ -1,3 +1,4 @@
+
 'use client';
 import {
   Card,
@@ -23,6 +24,7 @@ import {
 import type { LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useAge } from '../layout';
 
 interface GardenItem {
   thought: string;
@@ -73,6 +75,7 @@ const badgeData: BadgeItem[] = [
 
 export default function GardenPage() {
   const [gardenData, setGardenData] = useState<GardenItem[]>([]);
+  const { isChild } = useAge();
 
   useEffect(() => {
     try {
@@ -98,18 +101,17 @@ export default function GardenPage() {
   return (
     <div className="container mx-auto space-y-8">
       <div>
-        <h1 className="text-3xl font-headline mb-2">Your Progress Journal</h1>
+        <h1 className="text-3xl font-headline mb-2">{isChild ? 'Your Feelings Garden' : 'Your Progress Journal'}</h1>
         <p className="text-muted-foreground">
-          Visualize your emotional journey and celebrate your milestones.
+          {isChild ? 'See all the feelings you\'ve planted and watch them grow!' : 'Visualize your emotional journey and celebrate your milestones.'}
         </p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>My Reflection History</CardTitle>
+          <CardTitle>{isChild ? 'My Feelings History' : 'My Reflection History'}</CardTitle>
           <CardDescription>
-            Each entry represents a moment of reflection. Review your journey
-            over time.
+            {isChild ? 'Each flower is a feeling you shared. It\'s fun to look back!' : 'Each entry represents a moment of reflection. Review your journey over time.'}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -132,14 +134,14 @@ export default function GardenPage() {
             <div className="text-center py-12 text-muted-foreground">
               <Sprout className="w-12 h-12 mx-auto mb-4 text-chart-2" />
               <p className="font-semibold">
-                Your journal is waiting to be filled.
+                {isChild ? 'Your garden is empty!' : 'Your journal is waiting to be filled.'}
               </p>
               <p className="text-sm">
-                Start by creating your first reflection in the{' '}
+                {isChild ? 'Go to ' : 'Start by creating your first reflection in the '}
                 <Link href="/whispers" className="text-primary hover:underline">
-                  Whispers
-                </Link>{' '}
-                page.
+                  {isChild ? 'Whispers' : 'Whispers'}
+                </Link>
+                {isChild ? ' to plant your first feeling!' : ' page.'}
               </p>
             </div>
           )}
@@ -148,9 +150,9 @@ export default function GardenPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>My Achievements</CardTitle>
+          <CardTitle>{isChild ? 'My Awesome Badges' : 'My Achievements'}</CardTitle>
           <CardDescription>
-            Collect badges for achieving personal milestones.
+            {isChild ? 'Collect cool badges for being amazing!' : 'Collect badges for achieving personal milestones.'}
           </CardDescription>
         </CardHeader>
         <CardContent>

@@ -1,3 +1,6 @@
+
+'use client';
+
 import {
   Card,
   CardContent,
@@ -6,6 +9,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { WhisperForm } from '@/components/WhisperForm';
+import { useAge } from '../layout';
 
 const whispers = [
   "I'm feeling overwhelmed with work, but I'm afraid to tell anyone.",
@@ -19,15 +23,16 @@ const whispers = [
 ];
 
 export default function WhispersPage() {
+  const { isChild } = useAge();
+  
   return (
     <div className="container mx-auto space-y-8">
       <div>
         <h1 className="text-3xl font-headline mb-2">
-          Anonymous Thought Stream
+          {isChild ? 'Share a Feeling' : 'Anonymous Thought Stream'}
         </h1>
         <p className="text-muted-foreground">
-          A place to share your thoughts and feelings without judgment. You are
-          not alone.
+          {isChild ? 'Share a secret feeling. No one will know it\'s you!' : 'A place to share your thoughts and feelings without judgment. You are not alone.'}
         </p>
       </div>
 
@@ -35,10 +40,9 @@ export default function WhispersPage() {
         <div className="lg:col-span-1">
           <Card className="sticky top-24 shadow-lg">
             <CardHeader>
-              <CardTitle>Share a Thought</CardTitle>
+              <CardTitle>{isChild ? 'What Are You Feeling?' : 'Share a Thought'}</CardTitle>
               <CardDescription>
-                Your thoughts are safe here. Share anonymously and receive a
-                supportive reflection from our AI companion.
+                {isChild ? 'It\'s okay to share what you\'re feeling. Our friendly helper will write back to you.' : 'Your thoughts are safe here. Share anonymously and receive a supportive reflection from our AI companion.'}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -48,7 +52,7 @@ export default function WhispersPage() {
         </div>
         <div className="lg:col-span-2">
           <h2 className="text-xl font-bold mb-4 font-headline">
-            Community Stream
+            {isChild ? 'Feelings from Others' : 'Community Stream'}
           </h2>
           <div className="space-y-4">
             {whispers.map((whisper, index) => (

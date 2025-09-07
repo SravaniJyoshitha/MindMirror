@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { AppLayout } from '@/components/AppLayout';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 const metadata: Metadata = {
   title: 'MindMirror+',
@@ -28,45 +28,61 @@ function StandaloneLayout({ children }: { children: React.ReactNode }) {
 const AUTH_KEY = 'mindmirror-auth';
 const USER_AGE_KEY = 'mindmirror-user-age';
 
+interface AgeContextType {
+  isChild: boolean;
+}
+
+const AgeContext = createContext<AgeContextType>({ isChild: false });
+
+export const useAge = () => useContext(AgeContext);
+
+
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const [isChecking, setIsChecking] = useState(true);
   const [theme, setTheme] = useState('');
+  const [isChild, setIsChild] = useState(false);
 
   useEffect(() => {
+    let isAuthenticated = false;
+    let userAge = null;
     try {
-      // Auth check
-      const isAuthenticated = localStorage.getItem(AUTH_KEY) === 'true';
-      if (!isAuthenticated && pathname !== '/login') {
-        router.push('/login');
-        return; // Early return to prevent further state updates until redirect happens
-      }
-
-      // Theme check
+      isAuthenticated = localStorage.getItem(AUTH_KEY) === 'true';
       const ageStr = localStorage.getItem(USER_AGE_KEY);
       if (ageStr) {
         const age = parseInt(ageStr, 10);
+        userAge = age;
+        setIsChild(age <= 12);
         setTheme(age <= 12 ? 'theme-child' : '');
       } else {
+        setIsChild(false);
         setTheme('');
       }
-
     } catch (error) {
        // If localStorage is not available, default theme and proceed without auth for SSR/testing
+       setIsChild(false);
        setTheme('');
-    } finally {
-      setIsChecking(false);
+    }
+
+    if (!isAuthenticated && pathname !== '/login') {
+      router.push('/login');
+    } else {
+       setIsChecking(false);
     }
   }, [pathname, router]);
 
-  if (isChecking && pathname !== '/login') {
+  if (isChecking) {
     // Render nothing or a loading spinner to avoid content flash
     return null;
   }
 
   // Apply theme via a wrapper div on the client side
-  return <div className={theme}>{children}</div>;
+  return (
+    <AgeContext.Provider value={{ isChild }}>
+      <div className={theme}>{children}</div>
+    </AgeContext.Provider>
+  );
 }
 
 
