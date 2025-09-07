@@ -1,3 +1,4 @@
+
 'use client';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,17 +13,20 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Sparkles } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 const AUTH_KEY = 'mindmirror-auth';
+const USER_AGE_KEY = 'mindmirror-user-age';
 
 export default function LoginPage() {
   const router = useRouter();
+  const [age, setAge] = useState('');
 
   const handleLogin = () => {
     // In a real app, you'd have authentication logic here.
-    // For this prototype, we'll just navigate to the home page.
     try {
       localStorage.setItem(AUTH_KEY, 'true');
+      localStorage.setItem(USER_AGE_KEY, age);
     } catch (error) {
       console.error('Could not set auth status in local storage', error);
     }
@@ -54,7 +58,7 @@ export default function LoginPage() {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="age">Age</Label>
-              <Input id="age" type="number" placeholder="25" />
+              <Input id="age" type="number" placeholder="25" value={age} onChange={(e) => setAge(e.target.value)} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="location">Location</Label>

@@ -1,3 +1,4 @@
+
 'use client';
 import type { Metadata } from 'next';
 import './globals.css';
@@ -23,7 +24,7 @@ function StandaloneLayout({ children }: { children: React.ReactNode }) {
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </head>
@@ -35,6 +36,7 @@ function StandaloneLayout({ children }: { children: React.ReactNode }) {
 }
 
 const AUTH_KEY = 'mindmirror-auth';
+const USER_AGE_KEY = 'mindmirror-user-age';
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -71,6 +73,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
+  const [theme, setTheme] = useState('');
+
+  useEffect(() => {
+    try {
+      const ageStr = localStorage.getItem(USER_AGE_KEY);
+      if (ageStr) {
+        const age = parseInt(ageStr, 10);
+        if (age <= 12) {
+          setTheme('theme-child');
+        } else {
+          setTheme('');
+        }
+      }
+    } catch (error) {
+      // default theme
+      setTheme('');
+    }
+  }, [pathname]);
 
   if (pathname === '/login') {
     return (
@@ -81,7 +101,7 @@ export default function RootLayout({
   }
 
   return (
-    <html lang="en">
+    <html lang="en" className={theme}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -90,7 +110,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </head>
