@@ -36,7 +36,7 @@ export default function HomePage() {
             </CardHeader>
             <CardContent className="flex-grow">
               <p>
-                {isChild ? 'If you feel sad, angry, or lost, I can suggest fun activities like breathing exercises, drawing prompts, or games to help you understand your feelings and feel better.' : 'Describe what\'s on your mind and receive evidence-based cognitive reframing techniques, mindfulness exercises, and practical coping strategies to navigate challenges.'}
+                {isChild ? 'When you tell me how you\'re feeling, I listen and then create a special, one-of-a-kind activity just for you. This can include a fun breathing game, a creative drawing idea, or a story to help you understand and manage your feelings. I also share happy thoughts and music to make you smile!' : 'When you describe a situation, SparkAI acts as your personal wellness coach. It generates a private, structured session that includes a validated cognitive exercise (like CBT), key realizations to help you reframe your thoughts, an instant coping strategy for immediate relief, and a therapeutic music suggestion tailored to your state of mind.'}
               </p>
             </CardContent>
             <div className="p-6 pt-0">
