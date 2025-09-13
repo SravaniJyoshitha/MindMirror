@@ -143,7 +143,7 @@ export default function SparksPage() {
           <h1 className="text-3xl font-headline">
             {isChild ? 'Sparkle Bot' : 'SparkAI Therapist'}
           </h1>
-          {!isChild && <GeminiLogo className="size-7 text-primary" />}
+          {!isChild && <GeminiLogo className="text-primary" />}
         </div>
         <p className="text-muted-foreground max-w-2xl mx-auto mt-2">
           {isChild

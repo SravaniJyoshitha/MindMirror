@@ -32,7 +32,7 @@ export default function HomePage() {
                 <div>
                   <div className="flex items-center gap-2">
                     <CardTitle className="text-2xl">{isChild ? 'Your Sparkle Bot' : 'SparkAI Therapist'}</CardTitle>
-                     {!isChild && <GeminiLogo className="size-6 text-primary" />}
+                     {!isChild && <GeminiLogo className="text-primary" />}
                   </div>
                   <CardDescription>{isChild ? 'Get help with your feelings.' : 'Personalized cognitive exercises by Gemini.'}</CardDescription>
                 </div>
