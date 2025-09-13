@@ -15,6 +15,10 @@ const FutureSelfEchoInputSchema = z.object({
   situation: z
     .string()
     .describe('The current situation, worry, or aspiration of the user.'),
+  goal: z
+    .string()
+    .optional()
+    .describe('A future goal or dream the user has.'),
 });
 export type FutureSelfEchoInput = z.infer<typeof FutureSelfEchoInputSchema>;
 
@@ -37,14 +41,21 @@ const prompt = ai.definePrompt({
   name: 'futureSelfEchoPrompt',
   input: { schema: FutureSelfEchoInputSchema },
   output: { schema: FutureSelfEchoOutputSchema },
-  prompt: `You are an AI embodying a wise, compassionate, and successful future version of the user. The user will share a current situation, worry, or aspiration.
+  prompt: `You are an AI embodying a wise, compassionate, and successful future version of the user. The user will share a current situation, worry, or aspiration. They may also share a future goal or dream.
 
 Your task is to write a short, supportive, and encouraging "memory" from your perspective as their future self (e.g., from 10 years in the future). You are looking back at this exact moment the user is experiencing and remembering how you navigated it.
 
 The tone should be warm, reassuring, and filled with gentle wisdom. It is not about giving direct advice, but about reframing the current struggle as a temporary chapter in a longer, successful story.
 
+If the user provides a future goal, weave it into the memory. Connect their current struggle to the journey of achieving that dream. Show them how this moment was a stepping stone.
+
 User's current situation:
 "{{{situation}}}"
+
+{{#if goal}}
+User's future goal:
+"{{{goal}}}"
+{{/if}}
 
 Generate the following:
 1.  **Title:** A short, inspiring title for the message (e.g., "A Letter to My Past Self," "I Remember When," "From Your Future").

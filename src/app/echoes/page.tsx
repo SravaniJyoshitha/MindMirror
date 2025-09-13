@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Loader2, GitBranch, MessageSquare, Pen } from 'lucide-react';
+import { Loader2, GitBranch, MessageSquare, Pen, Target } from 'lucide-react';
 import {
   getFutureSelfEcho,
   type FutureSelfEchoOutput,
@@ -19,10 +19,12 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { Textarea } from '@/components/ui/textarea';
 import { useAge } from '../layout';
+import { Label } from '@/components/ui/label';
 
 export default function EchoesPage() {
   const [echo, setEcho] = useState<FutureSelfEchoOutput | null>(null);
   const [currentSituation, setCurrentSituation] = useState('');
+  const [futureGoal, setFutureGoal] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const { isChild } = useAge();
@@ -32,7 +34,7 @@ export default function EchoesPage() {
     if (!currentSituation.trim()) {
       toast({
         variant: 'destructive',
-        title: 'Please describe your situation.',
+        title: 'Please describe your current situation.',
         description:
           "We need to know what you're going through to get a message from your future self.",
       });
@@ -43,7 +45,10 @@ export default function EchoesPage() {
     setEcho(null);
 
     try {
-      const newEcho = await getFutureSelfEcho({ situation: currentSituation });
+      const newEcho = await getFutureSelfEcho({
+        situation: currentSituation,
+        goal: futureGoal,
+      });
       setEcho(newEcho);
     } catch (error) {
       console.error('Error generating future self echo:', error);
@@ -61,6 +66,7 @@ export default function EchoesPage() {
   const handleNewEcho = () => {
     setEcho(null);
     setCurrentSituation('');
+    setFutureGoal('');
   };
 
   const showInputArea = !echo && !isLoading;
@@ -72,8 +78,8 @@ export default function EchoesPage() {
       <div>
         <h1 className="text-3xl font-headline mb-2">Echoes of Tomorrow</h1>
         <p className="text-muted-foreground max-w-2xl mx-auto">
-          Write a message to your future self about a current worry or hope, and
-          receive a letter back from them.
+          Share a current worry and a future dream, and receive a letter back
+          from the version of you who has already achieved it.
         </p>
       </div>
 
@@ -82,22 +88,41 @@ export default function EchoesPage() {
           {showInputArea && (
             <>
               <CardHeader>
-                <CardTitle>What&apos;s on your mind today?</CardTitle>
+                <CardTitle>A Message to the Future</CardTitle>
                 <CardDescription>
-                  Share a current struggle, hope, or feeling. Your future self
-                  is listening.
+                  Your future self is listening. What do you want them to know?
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleGenerateEcho} className="grid w-full gap-4">
-                  <Textarea
-                    id="situation"
-                    placeholder="e.g., I'm feeling anxious about the future, or I hope I can achieve my goal of..."
-                    value={currentSituation}
-                    onChange={(e) => setCurrentSituation(e.target.value)}
-                    rows={5}
-                    className="resize-none"
-                  />
+                <form onSubmit={handleGenerateEcho} className="grid w-full gap-6">
+                  <div className="grid w-full gap-2">
+                    <Label htmlFor="goal" className="text-left flex items-center gap-2">
+                       <Target className="size-4" />
+                       My future goal or dream is... (optional)
+                    </Label>
+                    <Textarea
+                      id="goal"
+                      placeholder="e.g., to become a doctor, to travel the world, or to feel truly happy."
+                      value={futureGoal}
+                      onChange={(e) => setFutureGoal(e.target.value)}
+                      rows={2}
+                      className="resize-none"
+                    />
+                  </div>
+                  <div className="grid w-full gap-2">
+                     <Label htmlFor="situation" className="text-left flex items-center gap-2">
+                       <MessageSquare className="size-4" />
+                       What&apos;s on your mind today?
+                    </Label>
+                    <Textarea
+                      id="situation"
+                      placeholder="e.g., I'm feeling anxious about the future, or I hope I can achieve my goal of..."
+                      value={currentSituation}
+                      onChange={(e) => setCurrentSituation(e.target.value)}
+                      rows={4}
+                      className="resize-none"
+                    />
+                  </div>
                   <Button size="lg" type="submit">
                     <Pen className="mr-2" />
                     Send to the Future
