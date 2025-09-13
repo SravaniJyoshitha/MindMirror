@@ -20,11 +20,13 @@ import {
   Sun,
   Moon,
   Wind,
+  Home,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useAge } from '../layout';
+import { Button } from '@/components/ui/button';
 
 interface GardenItem {
   name: string;
@@ -77,15 +79,22 @@ export default function GardenPage() {
   const { isChild } = useAge();
   return (
     <div className="container mx-auto space-y-8">
-      <div>
-        <h1 className="text-3xl font-headline mb-2">
-          {isChild ? 'Your Feelings Garden' : 'Your Progress Journal'}
-        </h1>
-        <p className="text-muted-foreground">
-          {isChild
-            ? "See all the feelings you've planted and watch them grow!"
-            : 'Visualize your emotional journey and celebrate your milestones.'}
-        </p>
+      <div className="flex justify-between items-start">
+        <div>
+          <h1 className="text-3xl font-headline mb-2">
+            {isChild ? 'Your Feelings Garden' : 'Your Progress Journal'}
+          </h1>
+          <p className="text-muted-foreground">
+            {isChild
+              ? "See all the feelings you've planted and watch them grow!"
+              : 'Visualize your emotional journey and celebrate your milestones.'}
+          </p>
+        </div>
+        <Link href="/">
+          <Button variant="outline">
+            <Home className="mr-2" /> Home
+          </Button>
+        </Link>
       </div>
 
       <Card>

@@ -20,6 +20,7 @@ import {
   MessageSquare,
   Music,
   Smile,
+  Home,
 } from 'lucide-react';
 import {
   getCognitiveSpark,
@@ -138,18 +139,25 @@ export default function SparksPage() {
   return (
     <div className="container mx-auto flex flex-col items-center justify-center space-y-8 text-center">
       <SafetyAlertDialog open={showSafetyAlert} onOpenChange={setShowSafetyAlert} />
-      <div>
-        <div className="flex justify-center items-center gap-2">
-          <h1 className="text-3xl font-headline">
-            {isChild ? 'Sparkle Bot' : 'SparkAI Therapist'}
-          </h1>
-          {!isChild && <GeminiLogo className="text-primary" />}
+      <div className="w-full max-w-2xl flex justify-between items-start">
+        <div className="text-left">
+          <div className="flex items-center gap-2">
+            <h1 className="text-3xl font-headline">
+              {isChild ? 'Sparkle Bot' : 'SparkAI Therapist'}
+            </h1>
+            {!isChild && <GeminiLogo className="text-primary" />}
+          </div>
+          <p className="text-muted-foreground max-w-2xl mt-2">
+            {isChild
+              ? "Tell me about a feeling, and I'll give you a fun activity to feel better."
+              : 'Describe a situation and get a tailored cognitive exercise from Gemini.'}
+          </p>
         </div>
-        <p className="text-muted-foreground max-w-2xl mx-auto mt-2">
-          {isChild
-            ? "Tell me about a feeling, and I'll give you a fun activity to feel better."
-            : 'Describe a situation and get a tailored cognitive exercise from Gemini.'}
-        </p>
+        <Link href="/">
+          <Button variant="outline">
+            <Home className="mr-2" /> Home
+          </Button>
+        </Link>
       </div>
 
       <div className="w-full max-w-2xl">

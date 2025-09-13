@@ -17,8 +17,10 @@ import {
   UserPlus,
   Users,
   Video,
+  Home,
 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import Link from 'next/link';
 
 const whispers = [
   "I'm feeling overwhelmed with work, but I'm afraid to tell anyone.",
@@ -92,6 +94,11 @@ export default function WhispersPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <Link href="/">
+            <Button variant="outline">
+              <Home className="mr-2" /> Home
+            </Button>
+          </Link>
           <Button variant="outline" size="icon">
             <Users className="size-5" />
             <span className="sr-only">Community</span>

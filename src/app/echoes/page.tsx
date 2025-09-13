@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Loader2, GitBranch, MessageSquare, Pen, Target } from 'lucide-react';
+import { Loader2, GitBranch, MessageSquare, Pen, Target, Home } from 'lucide-react';
 import {
   getFutureSelfEcho,
   type FutureSelfEchoOutput,
@@ -20,6 +20,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Textarea } from '@/components/ui/textarea';
 import { useAge } from '../layout';
 import { Label } from '@/components/ui/label';
+import Link from 'next/link';
 
 export default function EchoesPage() {
   const [echo, setEcho] = useState<FutureSelfEchoOutput | null>(null);
@@ -75,12 +76,19 @@ export default function EchoesPage() {
 
   return (
     <div className="container mx-auto flex flex-col items-center justify-center space-y-8 text-center">
-      <div>
-        <h1 className="text-3xl font-headline mb-2">Echoes of Tomorrow</h1>
-        <p className="text-muted-foreground max-w-2xl mx-auto">
-          Share a current worry and a future dream, and receive a letter back
-          from the version of you who has already achieved it.
-        </p>
+      <div className="w-full max-w-2xl flex justify-between items-start">
+        <div className="text-left">
+          <h1 className="text-3xl font-headline mb-2">Echoes of Tomorrow</h1>
+          <p className="text-muted-foreground max-w-2xl">
+            Share a current worry and a future dream, and receive a letter back
+            from the version of you who has already achieved it.
+          </p>
+        </div>
+        <Link href="/">
+          <Button variant="outline">
+            <Home className="mr-2" /> Home
+          </Button>
+        </Link>
       </div>
 
       <div className="w-full max-w-2xl">
