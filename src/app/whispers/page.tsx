@@ -82,7 +82,7 @@ export default function WhispersPage() {
 
   return (
     <div className="container mx-auto space-y-8">
-      <div className="flex justify-between items-start">
+      <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
         <div>
           <h1 className="text-3xl font-headline mb-2">
             {isChild ? 'Helpers & Friends' : 'Community & Support'}
@@ -110,7 +110,7 @@ export default function WhispersPage() {
         </div>
       </div>
       <Tabs defaultValue="therapists" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-1 sm:grid-cols-2 h-auto sm:h-10">
           <TabsTrigger value="therapists">{isChild ? 'Find a Helper' : 'Connect with a Therapist'}</TabsTrigger>
           <TabsTrigger value="friends">{isChild ? 'Friends & Community' : 'Connect with Friends'}</TabsTrigger>
         </TabsList>
@@ -129,7 +129,7 @@ export default function WhispersPage() {
             <CardContent className="space-y-4">
               {therapists.map((therapist) => (
                  <Card key={therapist.name} className="p-4 hover:bg-accent/50 transition-colors">
-                  <div className="flex items-start gap-4">
+                  <div className="flex flex-col sm:flex-row items-start gap-4">
                      <Avatar className="h-16 w-16 border">
                        <AvatarImage src={therapist.avatar} alt={therapist.name} />
                        <AvatarFallback>{therapist.name.charAt(0)}</AvatarFallback>
@@ -138,7 +138,7 @@ export default function WhispersPage() {
                        <p className="font-bold">{therapist.name}</p>
                        <p className="text-xs font-medium text-primary">{therapist.specialty}</p>
                        <p className="text-sm text-muted-foreground mt-2">{therapist.bio}</p>
-                       <div className="flex gap-2 mt-3">
+                       <div className="flex gap-2 mt-3 flex-wrap">
                          <Button size="sm" variant="secondary">
                            <MessageSquarePlus className="mr-2" />
                            {isChild ? 'Chat' : 'Message'}
@@ -159,7 +159,7 @@ export default function WhispersPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
              <div className="lg:col-span-2">
               <Tabs defaultValue="stream">
-                <TabsList className="grid w-full grid-cols-2">
+                <TabsList className="grid w-full grid-cols-1 sm:grid-cols-2 h-auto sm:h-10">
                   <TabsTrigger value="friends">{isChild ? 'My Friends' : 'Friends List'}</TabsTrigger>
                   <TabsTrigger value="stream">
                     {isChild ? 'Feelings from Others' : 'Community Stream'}
@@ -173,7 +173,7 @@ export default function WhispersPage() {
                     </CardHeader>
                     <CardContent className="space-y-4">
                       {friends.map((friend) => (
-                        <div key={friend.name} className="flex items-center justify-between p-2 rounded-lg hover:bg-accent/50">
+                        <div key={friend.name} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-2 rounded-lg hover:bg-accent/50 gap-4">
                           <div className="flex items-center gap-4">
                             <Avatar>
                                <AvatarImage src={friend.avatar} alt={friend.name} />
@@ -182,7 +182,7 @@ export default function WhispersPage() {
                             </Avatar>
                             <p className="font-semibold">{friend.name}</p>
                           </div>
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 flex-wrap">
                             <Button variant="outline" size="sm">
                               <UserPlus className="mr-2" />
                               {isChild ? 'Add' : 'Add Friend'}
@@ -225,7 +225,7 @@ export default function WhispersPage() {
               </Tabs>
             </div>
             <div className="lg:col-span-1">
-              <Card className="sticky top-24 shadow-lg">
+              <Card className="sticky top-4 md:top-24 shadow-lg">
                 <CardHeader>
                   <CardTitle>Community Guidelines</CardTitle>
                 </CardHeader>

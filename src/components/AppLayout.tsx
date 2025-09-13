@@ -104,11 +104,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
-        <header className="sticky top-0 z-10 flex h-14 items-center justify-between border-b bg-background/80 px-4 backdrop-blur-sm md:hidden">
-          <Link href="/" className="flex items-center gap-2 font-bold">
-            <Sparkles className="size-6 text-primary" />
-            <span className="font-headline">MindMirror+</span>
-          </Link>
+        <header className="sticky top-0 z-10 flex h-14 items-center justify-end border-b bg-background/80 px-4 backdrop-blur-sm md:hidden">
           <SidebarTrigger />
         </header>
         <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
