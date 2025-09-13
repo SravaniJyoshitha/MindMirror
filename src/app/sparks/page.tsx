@@ -33,6 +33,7 @@ import { EmojiBar } from '@/components/ui/emoji-bar';
 import Link from 'next/link';
 import { Label } from '@/components/ui/label';
 import { GeminiLogo } from '@/components/ui/gemini-logo';
+import { SafetyAlertDialog } from '@/components/ui/safety-alert-dialog';
 
 const soundMap: Record<string, string> = {
   '432Hz Healing Frequency':
@@ -58,10 +59,21 @@ const SpotifyIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+const crisisKeywords = [
+  'suicide', 'kill myself', 'want to die', 'end my life', 'self-harm',
+  'suicidal', 'ending it all', 'hopeless', 'no reason to live'
+];
+
+function containsCrisisKeywords(text: string) {
+  const lowerCaseText = text.toLowerCase();
+  return crisisKeywords.some(keyword => lowerCaseText.includes(keyword));
+}
+
 export default function SparksPage() {
   const [spark, setSpark] = useState<CognitiveSparkOutput | null>(null);
   const [currentSituation, setCurrentSituation] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showSafetyAlert, setShowSafetyAlert] = useState(false);
   const { toast } = useToast();
   const { isChild } = useAge();
 
@@ -78,6 +90,11 @@ export default function SparksPage() {
           ? "I need to know how you're feeling to help!"
           : "We need to know what you're going through to help.",
       });
+      return;
+    }
+
+    if (containsCrisisKeywords(situation)) {
+      setShowSafetyAlert(true);
       return;
     }
 
@@ -120,6 +137,7 @@ export default function SparksPage() {
 
   return (
     <div className="container mx-auto flex flex-col items-center justify-center space-y-8 text-center">
+      <SafetyAlertDialog open={showSafetyAlert} onOpenChange={setShowSafetyAlert} />
       <div>
         <div className="flex justify-center items-center gap-2">
           <h1 className="text-3xl font-headline">
