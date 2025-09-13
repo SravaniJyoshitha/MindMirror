@@ -85,29 +85,6 @@ export default function HomePage() {
             </div>
           </Card>
         </Link>
-        <Link href="/garden" className="flex">
-          <Card className="w-full text-left transform transition-transform duration-300 hover:scale-105 hover:shadow-xl flex flex-col">
-            <CardHeader>
-              <div className="flex items-center gap-4">
-                 <div className="bg-primary/10 p-3 rounded-full">
-                  <Footprints className="w-8 h-8 text-primary" />
-                </div>
-                <div>
-                    <CardTitle className="text-2xl">{isChild ? 'Your Feelings Garden' : 'Your Progress Journal'}</CardTitle>
-                    <CardDescription>{isChild ? 'See how your feelings have grown!' : 'Visualize your emotional journey.'}</CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="flex-grow">
-              <p>
-                {isChild ? 'Look at all the feelings you\'ve shared, and the cool badges you\'ve collected.' : 'Review your reflection history, track your emotional patterns, and celebrate the milestones you\'ve achieved.'}
-              </p>
-            </CardContent>
-             <div className="p-6 pt-0">
-               <Button className="w-full">{isChild ? 'See My Garden' : 'View Journal'}</Button>
-            </div>
-          </Card>
-        </Link>
         <Link href="/echoes" className="flex">
           <Card className="w-full text-left transform transition-transform duration-300 hover:scale-105 hover:shadow-xl flex flex-col">
             <CardHeader>
@@ -128,6 +105,29 @@ export default function HomePage() {
             </CardContent>
              <div className="p-6 pt-0">
                <Button className="w-full">Get Perspective</Button>
+            </div>
+          </Card>
+        </Link>
+        <Link href="/garden" className="flex">
+          <Card className="w-full text-left transform transition-transform duration-300 hover:scale-105 hover:shadow-xl flex flex-col">
+            <CardHeader>
+              <div className="flex items-center gap-4">
+                 <div className="bg-primary/10 p-3 rounded-full">
+                  <Footprints className="w-8 h-8 text-primary" />
+                </div>
+                <div>
+                    <CardTitle className="text-2xl">{isChild ? 'Your Feelings Garden' : 'Your Progress Journal'}</CardTitle>
+                    <CardDescription>{isChild ? 'See how your feelings have grown!' : 'Visualize your emotional journey.'}</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="flex-grow">
+              <p>
+                {isChild ? 'Look at all the feelings you\'ve shared, and the cool badges you\'ve collected.' : 'Review your reflection history, track your emotional patterns, and celebrate the milestones you\'ve achieved.'}
+              </p>
+            </CardContent>
+             <div className="p-6 pt-0">
+               <Button className="w-full">{isChild ? 'See My Garden' : 'View Journal'}</Button>
             </div>
           </Card>
         </Link>
