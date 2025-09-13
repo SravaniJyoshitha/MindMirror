@@ -83,7 +83,7 @@ const therapists = [
 
 export default function WhispersPage() {
   const { isChild } = useAge();
-  const [whispers, setWhispers] = useState<string[]>(sampleWhispers);
+  const [whispers, setWhispers] = useState<string[]>([]);
   const [newThought, setNewThought] = useState('');
   const { toast } = useToast();
 
@@ -329,3 +329,5 @@ export default function WhispersPage() {
     </div>
   );
 }
+
+    

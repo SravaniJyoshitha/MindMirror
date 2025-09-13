@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview An AI flow that reflects on a user's thought.
@@ -47,3 +48,5 @@ export async function reflectOnThought(
 ): Promise<ReflectOnThoughtOutput> {
   return reflectOnThoughtFlow(thought);
 }
+
+    
