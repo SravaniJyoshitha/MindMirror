@@ -32,6 +32,7 @@ import { useAge } from '../layout';
 import { EmojiBar } from '@/components/ui/emoji-bar';
 import Link from 'next/link';
 import { Label } from '@/components/ui/label';
+import { GeminiLogo } from '@/components/ui/gemini-logo';
 
 const soundMap: Record<string, string> = {
   '432Hz Healing Frequency':
@@ -120,10 +121,13 @@ export default function SparksPage() {
   return (
     <div className="container mx-auto flex flex-col items-center justify-center space-y-8 text-center">
       <div>
-        <h1 className="text-3xl font-headline mb-2">
-          {isChild ? 'Sparkle Bot' : 'SparkAI Therapist'}
-        </h1>
-        <p className="text-muted-foreground max-w-2xl mx-auto">
+        <div className="flex justify-center items-center gap-2">
+          <h1 className="text-3xl font-headline">
+            {isChild ? 'Sparkle Bot' : 'SparkAI Therapist'}
+          </h1>
+          {!isChild && <GeminiLogo className="size-8 text-primary" />}
+        </div>
+        <p className="text-muted-foreground max-w-2xl mx-auto mt-2">
           {isChild
             ? "Tell me about a feeling, and I'll give you a fun activity to feel better."
             : 'Describe a situation and get a tailored cognitive exercise from Gemini.'}

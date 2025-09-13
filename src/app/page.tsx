@@ -6,6 +6,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Button } from '@/components/ui/button';
 import { Bot, MessageSquare, Footprints, GitBranch } from 'lucide-react';
 import { useAge } from './layout';
+import { GeminiLogo } from '@/components/ui/gemini-logo';
 
 
 export default function HomePage() {
@@ -29,7 +30,10 @@ export default function HomePage() {
                   <Bot className="w-8 h-8 text-primary" />
                 </div>
                 <div>
-                  <CardTitle className="text-2xl">{isChild ? 'Your Sparkle Bot' : 'SparkAI Therapist'}</CardTitle>
+                  <div className="flex items-center gap-2">
+                    <CardTitle className="text-2xl">{isChild ? 'Your Sparkle Bot' : 'SparkAI Therapist'}</CardTitle>
+                     {!isChild && <GeminiLogo className="size-6 text-primary" />}
+                  </div>
                   <CardDescription>{isChild ? 'Get help with your feelings.' : 'Personalized cognitive exercises by Gemini.'}</CardDescription>
                 </div>
               </div>
