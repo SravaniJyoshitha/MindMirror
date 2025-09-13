@@ -71,6 +71,29 @@ export default function HomePage() {
             </div>
           </Card>
         </Link>
+        <Link href="/echoes" className="flex">
+          <Card className="w-full text-left transform transition-transform duration-300 hover:scale-105 hover:shadow-xl flex flex-col">
+            <CardHeader>
+              <div className="flex items-center gap-4">
+                 <div className="bg-primary/10 p-3 rounded-full">
+                  <GitBranch className="w-8 h-8 text-primary" />
+                </div>
+                <div>
+                    <CardTitle className="text-2xl">Echoes of Tomorrow</CardTitle>
+                    <CardDescription>A message from your future self.</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="flex-grow">
+              <p>
+                Share a current worry or aspiration and receive a supportive "memory" from a wiser, future version of yourself who has already navigated this moment.
+              </p>
+            </CardContent>
+             <div className="p-6 pt-0">
+               <Button className="w-full">Get Perspective</Button>
+            </div>
+          </Card>
+        </Link>
         <Link href="/garden" className="flex">
           <Card className="w-full text-left transform transition-transform duration-300 hover:scale-105 hover:shadow-xl flex flex-col">
             <CardHeader>
@@ -91,29 +114,6 @@ export default function HomePage() {
             </CardContent>
              <div className="p-6 pt-0">
                <Button className="w-full">{isChild ? 'See My Garden' : 'View Journal'}</Button>
-            </div>
-          </Card>
-        </Link>
-         <Link href="/echoes" className="flex">
-          <Card className="w-full text-left transform transition-transform duration-300 hover:scale-105 hover:shadow-xl flex flex-col">
-            <CardHeader>
-              <div className="flex items-center gap-4">
-                 <div className="bg-primary/10 p-3 rounded-full">
-                  <GitBranch className="w-8 h-8 text-primary" />
-                </div>
-                <div>
-                    <CardTitle className="text-2xl">Echoes of Tomorrow</CardTitle>
-                    <CardDescription>A message from your future self.</CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="flex-grow">
-              <p>
-                Share a current worry or aspiration and receive a supportive "memory" from a wiser, future version of yourself who has already navigated this moment.
-              </p>
-            </CardContent>
-             <div className="p-6 pt-0">
-               <Button className="w-full">Get Perspective</Button>
             </div>
           </Card>
         </Link>
