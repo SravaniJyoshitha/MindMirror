@@ -63,7 +63,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [pathname, router]);
 
   if (isChecking) {
-    // Render nothing or a loading spinner to avoid content flash
+    // Render nothing or a loading spinner to avoid content flash and wait for client-side check
     return null;
   }
 
