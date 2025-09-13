@@ -14,12 +14,17 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   Info,
   MessageSquarePlus,
+  Pen,
+  Send,
   UserPlus,
   Users,
   Video,
 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useEffect, useState } from 'react';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
+import { format } from 'date-fns';
 
 const sampleWhispers = [
   "I'm feeling overwhelmed with work, but I'm afraid to tell anyone.",
@@ -68,7 +73,7 @@ const therapists = [
     specialty: 'Depression & Relationship Issues',
     bio: 'Dr. Thorne offers a compassionate, person-centered approach to help you navigate life\'s challenges and build stronger connections.',
   },
-    {
+  {
     name: 'Dr. Lena Petrova',
     avatar: 'https://i.pravatar.cc/150?img=3',
     specialty: 'Trauma & PTSD',
@@ -79,21 +84,65 @@ const therapists = [
 export default function WhispersPage() {
   const { isChild } = useAge();
   const [whispers, setWhispers] = useState<string[]>(sampleWhispers);
+  const [newThought, setNewThought] = useState('');
+  const { toast } = useToast();
 
-  useEffect(() => {
+  const getStoredReflections = () => {
     try {
       const storedReflections = localStorage.getItem('reflections');
       if (storedReflections) {
-        const parsedReflections: { thought: string; date: string }[] = JSON.parse(storedReflections);
-        const userWhispers = parsedReflections.map(item => item.thought).reverse();
-        // Show user's whispers first, then the sample ones, avoiding duplicates.
-        setWhispers([...userWhispers, ...sampleWhispers.filter(sw => !userWhispers.includes(sw))]);
+        return JSON.parse(storedReflections);
       }
     } catch (error) {
       console.error('Failed to parse reflections from localStorage', error);
-      setWhispers(sampleWhispers);
     }
+    return [];
+  };
+
+  useEffect(() => {
+    const reflections = getStoredReflections();
+    const userWhispers = reflections.map((item: any) => item.thought).reverse();
+    setWhispers([
+      ...userWhispers,
+      ...sampleWhispers.filter((sw) => !userWhispers.includes(sw)),
+    ]);
   }, []);
+  
+  const handleAddThought = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newThought.trim()) {
+      toast({
+        variant: 'destructive',
+        title: 'Please enter a thought.',
+      });
+      return;
+    }
+
+    const newReflection = {
+      thought: newThought,
+      date: format(new Date(), 'PP'),
+    };
+    
+    const reflections = getStoredReflections();
+    reflections.push(newReflection);
+
+    try {
+      localStorage.setItem('reflections', JSON.stringify(reflections));
+      setWhispers(prev => [newThought, ...prev]);
+      setNewThought('');
+      toast({
+        title: 'Reflection saved!',
+        description: 'Your thought has been added to your journal.',
+      });
+    } catch (error) {
+      console.error('Failed to save reflection to localStorage', error);
+      toast({
+        variant: 'destructive',
+        title: 'Uh oh! Something went wrong.',
+        description: 'Could not save your reflection. Please try again.',
+      });
+    }
+  };
 
   return (
     <div className="container mx-auto space-y-8">
@@ -104,7 +153,7 @@ export default function WhispersPage() {
           </h1>
           <p className="text-muted-foreground">
             {isChild
-              ? "Talk to a grown-up helper or connect with friends."
+              ? 'Talk to a grown-up helper or connect with friends.'
               : 'Find professional therapists or connect with peers.'}
           </p>
         </div>
@@ -115,10 +164,37 @@ export default function WhispersPage() {
           </Button>
           <Button variant="outline" size="icon">
             <MessageSquarePlus className="size-5" />
-             <span className="sr-only">Private Chats</span>
+            <span className="sr-only">Private Chats</span>
           </Button>
         </div>
       </div>
+      
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Pen />
+            {isChild ? 'What are you feeling?' : 'Add a new reflection'}
+          </CardTitle>
+          <CardDescription>
+            {isChild ? 'Share a feeling to plant it in your garden!' : 'Add a thought to your private journal. It will also appear anonymously in the community stream below.'}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleAddThought} className="flex items-start gap-4">
+            <Textarea
+              placeholder={isChild ? "I'm feeling happy because..." : "What's on your mind today?"}
+              value={newThought}
+              onChange={(e) => setNewThought(e.target.value)}
+              rows={2}
+              className="resize-none"
+            />
+            <Button type="submit" size="lg">
+              <Send className="mr-2" />
+              {isChild ? 'Share' : 'Save'}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
       
       <Tabs defaultValue="therapists" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
@@ -133,7 +209,7 @@ export default function WhispersPage() {
               </CardTitle>
               <CardDescription>
                 {isChild
-                  ? "Here are some friendly people you can talk to."
+                  ? 'Here are some friendly people you can talk to.'
                   : 'Browse profiles and find the right therapist for you.'}
               </CardDescription>
             </CardHeader>
