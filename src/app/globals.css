@@ -5,39 +5,39 @@
 
 @layer base {
   :root {
-    --background: 40 50% 98%;
-    --foreground: 25 50% 20%;
-    --card: 45 80% 100%;
-    --card-foreground: 25 50% 20%;
-    --popover: 45 80% 100%;
-    --popover-foreground: 25 50% 20%;
-    --primary: 15 85% 60%;
-    --primary-foreground: 25 50% 10%;
-    --secondary: 40 50% 94%;
-    --secondary-foreground: 25 50% 20%;
-    --muted: 40 50% 94%;
-    --muted-foreground: 30 30% 50%;
-    --accent: 15 85% 95%;
-    --accent-foreground: 15 85% 40%;
+    --background: 210 40% 98%;
+    --foreground: 215 25% 25%;
+    --card: 210 40% 100%;
+    --card-foreground: 215 25% 25%;
+    --popover: 210 40% 100%;
+    --popover-foreground: 215 25% 25%;
+    --primary: 205 90% 55%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 94%;
+    --secondary-foreground: 215 25% 25%;
+    --muted: 210 40% 94%;
+    --muted-foreground: 215 20% 55%;
+    --accent: 210 40% 90%;
+    --accent-foreground: 215 25% 25%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 40 50% 90%;
-    --input: 40 50% 90%;
-    --ring: 15 85% 60%;
-    --chart-1: 12 76% 61%;
+    --border: 210 40% 90%;
+    --input: 210 40% 90%;
+    --ring: 205 90% 55%;
+    --chart-1: 205 90% 55%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
-    --sidebar-background: 45 80% 100%;
-    --sidebar-foreground: 25 50% 20%;
-    --sidebar-primary: 15 85% 60%;
-    --sidebar-primary-foreground: 25 50% 10%;
-    --sidebar-accent: 40 50% 94%;
-    --sidebar-accent-foreground: 25 50% 20%;
-    --sidebar-border: 40 50% 90%;
-    --sidebar-ring: 15 85% 60%;
+    --sidebar-background: 210 40% 100%;
+    --sidebar-foreground: 215 25% 25%;
+    --sidebar-primary: 205 90% 55%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 210 40% 94%;
+    --sidebar-accent-foreground: 215 25% 25%;
+    --sidebar-border: 210 40% 90%;
+    --sidebar-ring: 205 90% 55%;
   }
   .dark {
     --background: 224 71% 4%;
