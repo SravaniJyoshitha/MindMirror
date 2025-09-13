@@ -125,7 +125,7 @@ export default function SparksPage() {
         <p className="text-muted-foreground max-w-2xl mx-auto">
           {isChild
             ? "Tell me about a feeling, and I'll give you a fun activity to feel better."
-            : 'Describe a situation or a feeling, and get a tailored cognitive exercise to help you find a new perspective.'}
+            : 'Describe a situation and get a tailored cognitive exercise from Google AI.'}
         </p>
       </div>
 
