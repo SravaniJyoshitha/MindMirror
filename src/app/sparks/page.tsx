@@ -31,6 +31,7 @@ import { Separator } from '@/components/ui/separator';
 import { useAge } from '../layout';
 import { EmojiBar } from '@/components/ui/emoji-bar';
 import Link from 'next/link';
+import { Label } from '@/components/ui/label';
 
 const soundMap: Record<string, string> = {
   '432Hz Healing Frequency':
@@ -144,27 +145,33 @@ export default function SparksPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleFormSubmit} className="grid w-full gap-2">
-                  <div className="relative">
-                    <Textarea
-                      id="situation"
-                      placeholder={
-                        isChild
-                          ? "e.g., I'm feeling sad because my friend was mean..."
-                          : "e.g., I'm feeling anxious about a big presentation..."
-                      }
-                      value={currentSituation}
-                      onChange={(e) => setCurrentSituation(e.target.value)}
-                      rows={4}
-                      className="resize-none pr-10"
-                    />
-                    <div className="absolute top-3 right-3">
-                      <Smile className="size-5 text-muted-foreground/50" />
+                <form onSubmit={handleFormSubmit} className="grid w-full gap-4">
+                  <div className="grid w-full gap-2 text-left">
+                     <Label htmlFor="situation" className="flex items-center gap-2">
+                       <MessageSquare className="size-4" />
+                       My situation is...
+                    </Label>
+                    <div className="relative">
+                      <Textarea
+                        id="situation"
+                        placeholder={
+                          isChild
+                            ? "e.g., I'm feeling sad because my friend was mean..."
+                            : "e.g., I'm feeling anxious about a big presentation..."
+                        }
+                        value={currentSituation}
+                        onChange={(e) => setCurrentSituation(e.target.value)}
+                        rows={4}
+                        className="resize-none pr-10"
+                      />
+                      <div className="absolute top-3 right-3">
+                        <Smile className="size-5 text-muted-foreground/50" />
+                      </div>
                     </div>
                   </div>
                   <EmojiBar onEmojiSelect={handleEmojiSelect} />
                   <Button size="lg" type="submit" className="w-full">
-                    <MessageSquare className="mr-2" />
+                    <Zap className="mr-2" />
                     {isChild ? 'Help Me Sparkle!' : 'Generate Spark'}
                   </Button>
                 </form>
