@@ -19,9 +19,7 @@ export function GeminiLogo({
       className={cn("size-6", className)}
       {...props}
     >
-      <path d="M12 2a10 10 0 1 0 10 10" />
-      <path d="M12 22a10 10 C 22 22 22 12 22 12" />
-      <path d="M2 12a10 10 0 0 0 10 10" />
+      <path d="M12 3v.01M16.2 7.8l.01.01M21 12h-.01M16.2 16.2l.01.01M12 21v-.01M7.8 16.2l-.01.01M3 12h.01M7.8 7.8l-.01.01" />
     </svg>
   );
 }
