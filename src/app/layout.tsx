@@ -12,17 +12,7 @@ const metadata: Metadata = {
 };
 
 function StandaloneLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <>
-      <head>
-        <title>{String(metadata.title)}</title>
-        <meta name="description" content={String(metadata.description)} />
-      </head>
-      <body className="font-body antialiased bg-background text-foreground">
-        {children}
-      </body>
-    </>
-  );
+  return <>{children}</>;
 }
 
 const AUTH_KEY = 'mindmirror-auth';
@@ -96,6 +86,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <title>{String(metadata.title)}</title>
+        <meta name="description" content={String(metadata.description)} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -107,7 +99,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="font-body antialiased">
+      <body className="font-body antialiased bg-background text-foreground">
         {pathname === '/login' ? (
           <StandaloneLayout>{children}</StandaloneLayout>
         ) : (
