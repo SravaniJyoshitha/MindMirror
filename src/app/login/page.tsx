@@ -17,9 +17,12 @@ import { useState } from 'react';
 
 const AUTH_KEY = 'mindmirror-auth';
 const USER_AGE_KEY = 'mindmirror-user-age';
+const USER_NAME_KEY = 'mindmirror-user-name';
+
 
 export default function LoginPage() {
   const router = useRouter();
+  const [name, setName] = useState('');
   const [age, setAge] = useState('');
 
   const handleLogin = () => {
@@ -27,6 +30,7 @@ export default function LoginPage() {
     try {
       localStorage.setItem(AUTH_KEY, 'true');
       localStorage.setItem(USER_AGE_KEY, age);
+      localStorage.setItem(USER_NAME_KEY, name);
     } catch (error) {
       console.error('Could not set auth status in local storage', error);
     }
@@ -47,23 +51,23 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-2">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Name</Label>
+              <Input id="name" type="text" placeholder="Your Name" value={name} onChange={(e) => setName(e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">Age</Label>
+              <Input id="age" type="number" placeholder="25" value={age} onChange={(e) => setAge(e.target.value)} />
+            </div>
+          </div>
+           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input id="email" type="email" placeholder="you@example.com" />
           </div>
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
             <Input id="password" type="password" placeholder="••••••••" />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="age">Age</Label>
-              <Input id="age" type="number" placeholder="25" value={age} onChange={(e) => setAge(e.target.value)} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="location">Location</Label>
-              <Input id="location" type="text" placeholder="City, Country" />
-            </div>
           </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
