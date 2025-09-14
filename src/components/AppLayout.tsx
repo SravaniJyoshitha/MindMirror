@@ -26,7 +26,6 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
-import { Toaster } from '@/components/ui/toaster';
 import { Button } from './ui/button';
 import { useAge } from '@/app/layout';
 
@@ -108,7 +107,6 @@ export function AppLayout({ children }: { children: ReactNode }) {
           <SidebarTrigger />
         </header>
         <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
-        <Toaster />
       </SidebarInset>
     </SidebarProvider>
   );

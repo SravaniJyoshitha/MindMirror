@@ -5,15 +5,12 @@ import './globals.css';
 import { AppLayout } from '@/components/AppLayout';
 import { usePathname, useRouter } from 'next/navigation';
 import { createContext, useContext, useEffect, useState } from 'react';
+import { Toaster } from '@/components/ui/toaster';
 
 const metadata: Metadata = {
   title: 'MindMirror+',
   description: 'The AI Wellness Companion',
 };
-
-function StandaloneLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
-}
 
 const AUTH_KEY = 'mindmirror-auth';
 const USER_AGE_KEY = 'mindmirror-user-age';
@@ -25,7 +22,6 @@ interface AgeContextType {
 const AgeContext = createContext<AgeContextType>({ isChild: false });
 
 export const useAge = () => useContext(AgeContext);
-
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -43,8 +39,9 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       if (ageStr) {
         const age = parseInt(ageStr, 10);
         userAge = age;
-        setIsChild(age <= 12);
-        setTheme(age <= 12 ? 'theme-child' : '');
+        const child = age <= 12;
+        setIsChild(child);
+        setTheme(child ? 'theme-child' : '');
       } else {
         setIsChild(false);
         setTheme('');
@@ -55,7 +52,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
        setTheme('');
     }
 
-    if (!isAuthenticated && pathname !== '/login') {
+    if (!isAuthenticated) {
       router.push('/login');
     } else {
        setIsChecking(false);
@@ -70,11 +67,12 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   // Apply theme via a wrapper div on the client side
   return (
     <AgeContext.Provider value={{ isChild }}>
-      <div className={theme}>{children}</div>
+      <div className={theme}>
+        <AppLayout>{children}</AppLayout>
+      </div>
     </AgeContext.Provider>
   );
 }
-
 
 export default function RootLayout({
   children,
@@ -101,12 +99,11 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased bg-background text-foreground">
         {pathname === '/login' ? (
-          <StandaloneLayout>{children}</StandaloneLayout>
+          children
         ) : (
-          <AuthProvider>
-            <AppLayout>{children}</AppLayout>
-          </AuthProvider>
+          <AuthProvider>{children}</AuthProvider>
         )}
+        <Toaster />
       </body>
     </html>
   );
