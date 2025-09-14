@@ -6,6 +6,7 @@ import { AppLayout } from '@/components/AppLayout';
 import { usePathname, useRouter } from 'next/navigation';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Toaster } from '@/components/ui/toaster';
+import LoginPage from './login/page';
 
 const metadata: Metadata = {
   title: 'MindMirror+',
@@ -97,7 +98,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased bg-background text-foreground">
-        {isLoginPage ? children : <AuthProvider>{children}</AuthProvider>}
+        {isLoginPage ? <LoginPage /> : <AuthProvider>{children}</AuthProvider>}
         <Toaster />
       </body>
     </html>
