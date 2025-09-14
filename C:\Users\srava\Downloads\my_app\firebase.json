@@ -3,10 +3,7 @@
   "hosting": {
     "source": ".",
     "frameworksBackend": {
-      "region": "us-central1",
-      "runtime": "nodejs20",
-      "entryPoint": "next start",
-      "npm-run-build": "npm run build"
+      "region": "us-central1"
     }
   }
 }
