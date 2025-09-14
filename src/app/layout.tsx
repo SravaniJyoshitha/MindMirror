@@ -32,13 +32,11 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let isAuthenticated = false;
-    let userAge = null;
     try {
       isAuthenticated = localStorage.getItem(AUTH_KEY) === 'true';
       const ageStr = localStorage.getItem(USER_AGE_KEY);
       if (ageStr) {
         const age = parseInt(ageStr, 10);
-        userAge = age;
         const child = age <= 12;
         setIsChild(child);
         setTheme(child ? 'theme-child' : '');
@@ -52,30 +50,12 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
        setTheme('');
     }
 
-    if (!isAuthenticated && pathname !== '/login') {
+    if (!isAuthenticated) {
       router.push('/login');
     } else {
        setIsChecking(false);
     }
   }, [pathname, router]);
-
-  useEffect(() => {
-    // This effect handles the case where the user is already authenticated and lands on the login page
-    let isAuthenticated = false;
-     try {
-      isAuthenticated = localStorage.getItem(AUTH_KEY) === 'true';
-    } catch (error) {
-      // ignore
-    }
-    if (isAuthenticated && pathname === '/login') {
-      router.push('/');
-    } else if (!isAuthenticated && pathname !== '/login') {
-       router.push('/login');
-    } else {
-      setIsChecking(false);
-    }
-  }, [pathname, router]);
-
 
   if (isChecking) {
     // Render nothing or a loading spinner to avoid content flash and wait for client-side check
@@ -117,11 +97,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased bg-background text-foreground">
-        {isLoginPage ? (
-          children
-        ) : (
-          <AuthProvider>{children}</AuthProvider>
-        )}
+        {isLoginPage ? children : <AuthProvider>{children}</AuthProvider>}
         <Toaster />
       </body>
     </html>

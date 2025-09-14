@@ -27,6 +27,11 @@ export default function LoginPage() {
 
   const handleLogin = () => {
     // In a real app, you'd have authentication logic here.
+    if (!name || !age) {
+        // Basic validation
+        alert('Please enter your name and age.');
+        return;
+    }
     try {
       localStorage.setItem(AUTH_KEY, 'true');
       localStorage.setItem(USER_AGE_KEY, age);
