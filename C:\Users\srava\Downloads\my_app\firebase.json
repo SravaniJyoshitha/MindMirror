@@ -1,6 +1,11 @@
 {
   "hosting": {
     "source": ".",
-    "frameworksBackend": {}
+    "frameworksBackend": {
+      "region": "us-central1",
+      "runtime": "nodejs20",
+      "entryPoint": "next start",
+      "npm-run-build": "next build"
+    }
   }
 }
