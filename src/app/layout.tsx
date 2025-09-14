@@ -52,12 +52,30 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
        setTheme('');
     }
 
-    if (!isAuthenticated) {
+    if (!isAuthenticated && pathname !== '/login') {
       router.push('/login');
     } else {
        setIsChecking(false);
     }
   }, [pathname, router]);
+
+  useEffect(() => {
+    // This effect handles the case where the user is already authenticated and lands on the login page
+    let isAuthenticated = false;
+     try {
+      isAuthenticated = localStorage.getItem(AUTH_KEY) === 'true';
+    } catch (error) {
+      // ignore
+    }
+    if (isAuthenticated && pathname === '/login') {
+      router.push('/');
+    } else if (!isAuthenticated && pathname !== '/login') {
+       router.push('/login');
+    } else {
+      setIsChecking(false);
+    }
+  }, [pathname, router]);
+
 
   if (isChecking) {
     // Render nothing or a loading spinner to avoid content flash and wait for client-side check
@@ -80,6 +98,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
+  const isLoginPage = pathname === '/login';
 
   return (
     <html lang="en">
@@ -98,7 +117,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased bg-background text-foreground">
-        {pathname === '/login' ? (
+        {isLoginPage ? (
           children
         ) : (
           <AuthProvider>{children}</AuthProvider>
