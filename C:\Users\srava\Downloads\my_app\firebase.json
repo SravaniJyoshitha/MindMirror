@@ -1,8 +1,11 @@
+
 {
   "hosting": {
     "source": ".",
     "frameworksBackend": {
-      "runtime": "nodejs20"
+      "runtime": "nodejs20",
+      "npm-run-build": "next build",
+      "entryPoint": "next start"
     }
   }
 }
