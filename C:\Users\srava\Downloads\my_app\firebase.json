@@ -1,3 +1,4 @@
+
 {
   "hosting": {
     "source": ".",
@@ -5,7 +6,7 @@
       "region": "us-central1",
       "runtime": "nodejs20",
       "entryPoint": "next start",
-      "npm-run-build": "next build"
+      "npm-run-build": "npm run build"
     }
   }
 }
