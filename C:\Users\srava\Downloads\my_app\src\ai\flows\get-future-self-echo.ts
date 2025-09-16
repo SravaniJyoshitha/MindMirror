@@ -1,5 +1,4 @@
 
-'use server';
 /**
  * @fileOverview An AI flow that generates a supportive message from a future self.
  *

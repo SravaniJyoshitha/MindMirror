@@ -1,5 +1,4 @@
 
-'use server';
 /**
  * @fileOverview An AI flow that generates a cognitive reframing exercise based on a user's situation.
  *
