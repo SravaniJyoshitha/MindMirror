@@ -37,7 +37,7 @@ export default function EchoesPage() {
         variant: 'destructive',
         title: 'Please describe your current situation.',
         description:
-          "We need to know what you're going through to get a message from your future self.",
+          "We need to know what's on your mind to get a message from your future self.",
       });
       return;
     }
