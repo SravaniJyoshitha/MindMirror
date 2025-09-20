@@ -21,6 +21,18 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  exportPathMap: async function (
+    defaultPathMap,
+    { dev, dir, outDir, distDir, buildId }
+  ) {
+    return {
+      '/': { page: '/' },
+      '/echoes': { page: '/echoes' },
+      '/garden': { page: '/garden' },
+      '/sparks': { page: '/sparks' },
+      '/whispers': { page: '/whispers' },
+    }
+  },
 };
 
 export default nextConfig;
