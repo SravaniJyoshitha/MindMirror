@@ -106,9 +106,6 @@
 }
 
 @layer base {
-  body {
-    @apply bg-background text-foreground;
-  }
   .theme-child body {
     @apply font-child;
   }
