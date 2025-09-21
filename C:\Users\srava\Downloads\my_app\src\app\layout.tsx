@@ -51,24 +51,20 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
        setTheme('');
     }
 
-    if (!isAuthenticated) {
-      if (pathname !== '/login') {
-        router.push('/login');
-      } else {
-        setIsChecking(false);
-      }
+    if (!isAuthenticated && pathname !== '/login') {
+      router.push('/login');
     } else {
        setIsChecking(false);
     }
   }, [pathname, router]);
-
+  
   useEffect(() => {
     document.body.className = `font-body antialiased bg-background text-foreground ${
       isChild ? 'theme-child font-child' : 'font-headline'
     }`;
   }, [isChild]);
 
-  if (isChecking && pathname !== '/login') {
+  if (isChecking) {
     // Render nothing or a loading spinner to avoid content flash and wait for client-side check
     return null;
   }
