@@ -52,13 +52,23 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     if (!isAuthenticated) {
-      router.push('/login');
+      if (pathname !== '/login') {
+        router.push('/login');
+      } else {
+        setIsChecking(false);
+      }
     } else {
        setIsChecking(false);
     }
   }, [pathname, router]);
 
-  if (isChecking) {
+  useEffect(() => {
+    document.body.className = `font-body antialiased bg-background text-foreground ${
+      isChild ? 'theme-child font-child' : 'font-headline'
+    }`;
+  }, [isChild]);
+
+  if (isChecking && pathname !== '/login') {
     // Render nothing or a loading spinner to avoid content flash and wait for client-side check
     return null;
   }
@@ -93,11 +103,11 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Nunito:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className="font-body antialiased bg-background text-foreground">
+      <body>
         {isLoginPage ? <LoginPage /> : <AuthProvider>{children}</AuthProvider>}
         <Toaster />
       </body>
